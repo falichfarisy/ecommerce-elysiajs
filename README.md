@@ -142,11 +142,4 @@ Semua response menggunakan format:
   "data": {...}|"message": "..."
 }
 ```
-
-## Environment Variables
-
-Buat file `.env`:
-
-```
-JWT_SECRET=your-super-secret-key-change-in-production
-```
+testing perubahan menggunakn CI/CD
