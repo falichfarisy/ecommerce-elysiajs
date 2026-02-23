@@ -2,7 +2,7 @@ name: Deploy Production
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   deploy:
@@ -11,4 +11,16 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - run: echo "Deploy ke production"
+
+      - uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Build
+        run: bun build src/index.ts --outdir ./dist
+
+      - name: Deploy to production
+        run: echo "Deploy ke production server"
