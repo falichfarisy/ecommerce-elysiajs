@@ -20,7 +20,7 @@ jobs:
         run: bun install
 
       - name: Build
-        run: bun build src/index.ts --outdir ./dist
+        run: bun build src/index.ts --outdir ./dist --target=bun
 
       - name: Deploy to production
         run: echo "Deploy ke production server"
