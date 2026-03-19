@@ -6,7 +6,7 @@ import { SignJWT, jwtVerify } from "jose";
 
 const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET || "super-secret-key");
 
-export const authModule = new Elysia({ prefix: "/auth" })
+export const authModule = new Elysia({ prefix: "/api/auth" })
   // POST /auth/register
 	.post("/register", async ({ body, set }) => {
 		// POST /auth/register

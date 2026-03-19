@@ -226,32 +226,34 @@ export default function HomePage() {
 					</div>
 					<div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
 						{products.slice(0, 6).map((product) => (
-							<Card key={product.id} className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer">
-								<div className="aspect-square bg-gray-100 flex items-center justify-center text-6xl">
-									{product.image}
-								</div>
-								<CardContent className="p-3">
-									<h3 className="font-medium text-sm line-clamp-2 mb-2 h-10">
-										{product.name}
-									</h3>
-									<div className="flex items-center gap-1 text-sm">
-										<Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
-										<span className="font-medium">{product.rating}</span>
-										<span className="text-gray-400">({product.reviews})</span>
+							<Link key={product.id} href={`/product/${product.id}`}>
+								<Card className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer h-full">
+									<div className="aspect-square bg-gray-100 flex items-center justify-center text-6xl">
+										{product.image}
 									</div>
-								</CardContent>
-								<CardFooter className="p-3 pt-0">
-									<div className="w-full">
-										<p className="font-bold text-primary">{formatPrice(product.price)}</p>
-										<p className="text-xs text-gray-400 line-through">
-											{formatPrice(product.originalPrice)}
-										</p>
-										<div className="mt-1 bg-red-100 text-red-600 text-xs px-2 py-0.5 rounded inline-block">
-											{Math.round((1 - product.price / product.originalPrice) * 100)}% OFF
+									<CardContent className="p-3">
+										<h3 className="font-medium text-sm line-clamp-2 mb-2 h-10">
+											{product.name}
+										</h3>
+										<div className="flex items-center gap-1 text-sm">
+											<Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
+											<span className="font-medium">{product.rating}</span>
+											<span className="text-gray-400">({product.reviews})</span>
 										</div>
-									</div>
-								</CardFooter>
-							</Card>
+									</CardContent>
+									<CardFooter className="p-3 pt-0">
+										<div className="w-full">
+											<p className="font-bold text-primary">{formatPrice(product.price)}</p>
+											<p className="text-xs text-gray-400 line-through">
+												{formatPrice(product.originalPrice)}
+											</p>
+											<div className="mt-1 bg-red-100 text-red-600 text-xs px-2 py-0.5 rounded inline-block">
+												{Math.round((1 - product.price / product.originalPrice) * 100)}% OFF
+											</div>
+										</div>
+									</CardFooter>
+								</Card>
+							</Link>
 						))}
 					</div>
 				</div>
@@ -267,38 +269,43 @@ export default function HomePage() {
 					</div>
 					<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
 						{products.map((product) => (
-							<Card key={product.id} className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer group">
-								<div className="relative aspect-square bg-gray-100 flex items-center justify-center text-6xl group-hover:scale-105 transition-transform">
-									{product.image}
-									<Button
-										size="icon"
-										variant="secondary"
-										className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
-									>
-										<Heart className="h-4 w-4" />
-									</Button>
-								</div>
-								<CardContent className="p-4">
-									<h3 className="font-medium text-sm line-clamp-2 mb-2 h-10">
-										{product.name}
-									</h3>
-									<div className="flex items-center gap-1 text-sm mb-2">
-										<Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
-										<span className="font-medium">{product.rating}</span>
-										<span className="text-gray-400">({product.reviews})</span>
+							<Link key={product.id} href={`/product/${product.id}`}>
+								<Card className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer group h-full">
+									<div className="relative aspect-square bg-gray-100 flex items-center justify-center text-6xl group-hover:scale-105 transition-transform">
+										{product.image}
+										<Button
+											size="icon"
+											variant="secondary"
+											className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
+											onClick={(e) => {
+												e.preventDefault();
+											}}
+										>
+											<Heart className="h-4 w-4" />
+										</Button>
 									</div>
-									<p className="font-bold text-lg text-primary">{formatPrice(product.price)}</p>
-									<p className="text-xs text-gray-400 line-through">
-										{formatPrice(product.originalPrice)}
-									</p>
-								</CardContent>
-								<CardFooter className="p-4 pt-0">
-									<Button className="w-full" size="sm">
-										<ShoppingCart className="h-4 w-4 mr-2" />
-										Add to Cart
-									</Button>
-								</CardFooter>
-							</Card>
+									<CardContent className="p-4">
+										<h3 className="font-medium text-sm line-clamp-2 mb-2 h-10">
+											{product.name}
+										</h3>
+										<div className="flex items-center gap-1 text-sm mb-2">
+											<Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
+											<span className="font-medium">{product.rating}</span>
+											<span className="text-gray-400">({product.reviews})</span>
+										</div>
+										<p className="font-bold text-lg text-primary">{formatPrice(product.price)}</p>
+										<p className="text-xs text-gray-400 line-through">
+											{formatPrice(product.originalPrice)}
+										</p>
+									</CardContent>
+									<CardFooter className="p-4 pt-0">
+										<Button className="w-full" size="sm">
+											<ShoppingCart className="h-4 w-4 mr-2" />
+											Add to Cart
+										</Button>
+									</CardFooter>
+								</Card>
+							</Link>
 						))}
 					</div>
 				</div>

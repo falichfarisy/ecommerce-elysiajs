@@ -46,4 +46,4 @@ const app = new Elysia()
 	.use(cartModule)
 	.use(ordersModule)
 	.use(profileModule)
-	.listen(3000);
+	.listen(3001);
