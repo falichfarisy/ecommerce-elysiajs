@@ -1,6 +1,7 @@
 "use client";
 
-import { ShoppingCart, Search, User, Menu, Heart, Star, ChevronRight } from "lucide-react";
+import Link from "next/link";
+import { ShoppingCart, Search, Menu, Heart, Star, ChevronRight } from "lucide-react";
 import * as React from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -74,8 +75,12 @@ export default function HomePage() {
 								</span>
 							</Button>
 							<div className="hidden md:flex items-center gap-2 ml-2">
-								<Button variant="outline">Masuk</Button>
-								<Button>Daftar</Button>
+								<Button variant="outline" asChild>
+									<Link href="/login">Masuk</Link>
+								</Button>
+								<Button asChild>
+									<Link href="/register">Daftar</Link>
+								</Button>
 							</div>
 						</div>
 					</div>
