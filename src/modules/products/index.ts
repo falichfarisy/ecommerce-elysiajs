@@ -2,7 +2,7 @@ import { Elysia, t } from "elysia";
 import { db, products, type NewProduct, type Product } from "../../db";
 import { eq } from "drizzle-orm";
 
-export const productsModule = new Elysia({ prefix: "/products" })
+export const productsModule = new Elysia({ prefix: "/product" })
 	.get("/", async () => {
 		const allProducts = await db.select().from(products);
 		return { success: true, data: allProducts };
@@ -37,6 +37,8 @@ export const productsModule = new Elysia({ prefix: "/products" })
 			}),
 		},
 	)
+
+	// PUT /product/:id - update product
 	.put("/:id", async ({ params, body, set }) => {
 		const existing = await db
 			.select()
@@ -54,6 +56,8 @@ export const productsModule = new Elysia({ prefix: "/products" })
 			.returning();
 		return { success: true, data: result[0] };
 	})
+
+	// DELETE - /product/:id - Hapus product dari database
 	.delete("/:id", async ({ params, set }) => {
 		const existing = await db
 			.select()

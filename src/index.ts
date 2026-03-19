@@ -3,8 +3,24 @@ import { productsModule } from "./modules/products";
 import { authModule } from "./modules/auth";
 import { cartModule } from "./modules/cart";
 import { ordersModule } from "./modules/orders";
+import logixlysia from "logixlysia";
+import { profileModule } from "./modules/profile";
+import { rateLimit } from "elysia-rate-limit";
+
+const limiter = rateLimit({
+	duration: 60000,
+	max: 10,
+});
 
 const app = new Elysia()
+	.use(logixlysia({
+		config: {
+			showStartupMessage: true,
+			startupMessageFormat: 'simple',
+			ip: true,
+			logFilePath: './logs/app.log'
+		}
+	}))
 	.onError(({ code, error, status }) => {
 		if (code === "VALIDATION") {
 			return status(400, { success: false, message: String(error) });
@@ -24,10 +40,10 @@ const app = new Elysia()
 			orders: ["/orders", "/orders/:id"],
 		},
 	}))
+	.use(limiter)
 	.use(authModule)
 	.use(productsModule)
 	.use(cartModule)
 	.use(ordersModule)
+	.use(profileModule)
 	.listen(3000);
-
-console.log(`🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`);
