@@ -45,7 +45,7 @@ export default function RegisterPage() {
 
 		await new Promise((resolve) => setTimeout(resolve, 1000));
 
-		router.push("/");
+		router.push("/login");
 	};
 
 	return (
@@ -192,7 +192,7 @@ export default function RegisterPage() {
 							)}
 						</div>
 
-						<div className="flex items-start space-x-2">
+						<div className="flex flex-row items-start space-x-2">
 							<Checkbox
 								id="agreeTerms"
 								checked={formData.agreeTerms}
@@ -202,11 +202,11 @@ export default function RegisterPage() {
 								className="mt-0.5"
 							/>
 							<Label htmlFor="agreeTerms" className="text-sm font-normal leading-normal">
-								Saya setuju dengan{" "}
+								Saya setuju dengan
 								<Link href="#" className="text-primary hover:underline">
 									Syarat & Ketentuan
-								</Link>{" "}
-								dan{" "}
+								</Link>
+								dan
 								<Link href="#" className="text-primary hover:underline">
 									Kebijakan Privasi
 								</Link>

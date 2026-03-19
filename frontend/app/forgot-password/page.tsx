@@ -55,21 +55,21 @@ export default function ForgotPasswordPage() {
 							Email Terkirim!
 						</h2>
 						<p className="text-gray-600 mb-6">
-							Kami telah发送链接重置密码 ke{" "}
+							Kami telah mengirim pesan <b>email</b> ke{" "}
 							<span className="font-medium text-gray-900">{email}</span>.
 							<br />
-							Silakan检查邮箱您并按照说明重置密码。
+							Silakan periksa pesan email.
 						</p>
 
 						<div className="bg-blue-50 rounded-lg p-4 mb-6">
 							<div className="flex items-start gap-3 text-left">
-								<Mail className="h-5 w-5 text-blue-600 mt-0.5 flex-shrink-0" />
+								<Mail className="h-5 w-5 text-blue-600 mt-0.5 shrink-0" />
 								<p className="text-sm text-blue-800">
 									Tidak menerima email? Periksa folder spam atau{" "}
 									<button
 										type="button"
 										onClick={() => setIsSubmitted(false)}
-										className="font-medium hover:underline"
+										className="font-semibold underline"
 									>
 										kirim ulang
 									</button>

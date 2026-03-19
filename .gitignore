@@ -43,3 +43,7 @@ package-lock.json
 
 # opencode 
 .opencode/
+
+# env
+.env
+.env.*
