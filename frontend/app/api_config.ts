@@ -1,24 +1,21 @@
-import axios from "axios"
-import { error } from "console";
+import axios from "axios";
+
+const BASE_URL = "http://localhost:3001";
+
+const api = axios.create({
+	baseURL: BASE_URL,
+	headers: {
+		"Content-Type": "application/json",
+	},
+	withCredentials: true,
+});
 
 export const postData = async (endpoint: string, data: Record<string, string>) => {
-    try{
-        // request GET from API
-        const response = await axios.post(endpoint, data);
-        
-        return response.data;
-    } catch (e) {
-        console.error(`[POST] Error post data: ${e}`)
-        throw error;
-    }
-}
+	const response = await api.post(endpoint, data);
+	return response.data;
+};
 
-export const getData = async (endpoint: string) => {
-    try{
-        const response = await axios.get(endpoint);
-        return response.data;
-    } catch (e){
-        console.error(`[GET] Error get data: ${e}`)
-        throw error;
-    }
-}
+export const getData = async (endpoint: string, data?: Record<string, string>) => {
+	const response = await api.get(endpoint, { params: data });
+	return response.data;
+};
