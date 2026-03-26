@@ -36,13 +36,6 @@ export const authMiddleware = new Elysia({ name: "better-auth-middleware" })
 
 export const authModule = new Elysia({ prefix: "/api/auth" })
 	.use(authMiddleware)
-	.all("/*", betterAuthHandler, {
-		beforeHandle: ({ request }) => {
-			if (!BETTER_AUTH_ACCEPT_METHODS.includes(request.method)) {
-				return;
-			}
-		},
-	})
 	.post(
 		"/register",
 		async ({ body, set }) => {
@@ -58,22 +51,30 @@ export const authModule = new Elysia({ prefix: "/api/auth" })
 				return { success: false, message: "Email already registered" };
 			}
 
-			const userData = await auth.api.signUpEmail({
-				body: {
-					email,
-					password,
-					name: username,
-				},
-			});
-
-			if (userData.user) {
-				await db.insert(userProfile).values({
-					userId: userData.user.id,
-					username,
+			try {
+				const userData = await auth.api.signUpEmail({
+					body: {
+						email,
+						password,
+						name: username,
+					},
 				});
-			}
 
-			return { success: true, data: userData };
+				if (userData.user) {
+					await db.insert(userProfile).values({
+						userId: userData.user.id,
+						username,
+					});
+				}
+
+				return { success: true, data: userData };
+			} catch (error: any) {
+				if (error.message?.includes("already") || error.message?.includes("exists")) {
+					set.status = 400;
+					return { success: false, message: "Email already registered" };
+				}
+				throw error;
+			}
 		},
 		{
 			body: t.Object({
@@ -82,4 +83,11 @@ export const authModule = new Elysia({ prefix: "/api/auth" })
 				username: t.String({ minLength: 2 }),
 			}),
 		},
-	);
+	)
+	.all("/*", betterAuthHandler, {
+		beforeHandle: ({ request }) => {
+			if (!BETTER_AUTH_ACCEPT_METHODS.includes(request.method)) {
+				return;
+			}
+		},
+	});
