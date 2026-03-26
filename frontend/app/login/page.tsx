@@ -8,6 +8,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Spinner } from "@/components/ui/spinner";
+import { postData } from "../api_config";
 
 export default function LoginPage() {
 	const router = useRouter();
@@ -21,15 +23,28 @@ export default function LoginPage() {
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
+
 		setIsLoading(true);
 
-		await new Promise((resolve) => setTimeout(resolve, 1000));
+		try {
+			const result = await postData("/api/auth/sign-in", {
+				email: formData.email,
+				password: formData.password,
+			});
 
-		router.push("/");
+			if (result.success) {
+				router.push("/");
+			}
+		} catch (error) {
+			console.error("Login failed:", error);
+		} finally {
+			setIsLoading(false);
+		}
 	};
 
 	return (
 		<div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4">
+			{isLoading && <Spinner className="size-6"/>}
 			<div className="max-w-md w-full">
 				<div className="text-center mb-8">
 					<Link href="/" className="inline-flex items-center gap-2 mb-6">
@@ -78,9 +93,9 @@ export default function LoginPage() {
 									onClick={() => setShowPassword(!showPassword)}
 								>
 									{showPassword ? (
-										<EyeOff className="h-4 w-4 text-gray-400" />
-									) : (
 										<Eye className="h-4 w-4 text-gray-400" />
+									) : (
+										<EyeOff className="h-4 w-4 text-gray-400" />
 									)}
 								</Button>
 							</div>

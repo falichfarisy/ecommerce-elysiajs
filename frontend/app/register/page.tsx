@@ -8,12 +8,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
+import { postData } from "../api_config";
 
 export default function RegisterPage() {
 	const router = useRouter();
 	const [showPassword, setShowPassword] = useState(false);
 	const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
+	const [errorMessage, setErrorMessage] = useState("");
 	const [formData, setFormData] = useState({
 		fullName: "",
 		email: "",
@@ -36,6 +38,7 @@ export default function RegisterPage() {
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
+		setErrorMessage("");
 
 		if (!isPasswordValid || !doPasswordsMatch || !formData.agreeTerms) {
 			return;
@@ -43,9 +46,23 @@ export default function RegisterPage() {
 
 		setIsLoading(true);
 
-		await new Promise((resolve) => setTimeout(resolve, 1000));
+		try {
+			const result = await postData("/api/auth/register", {
+				username: formData.fullName,
+				email: formData.email,
+				password: formData.password
+			});
 
-		router.push("/login");
+			if (result.success) {
+				router.push("/login");
+			} else {
+				setErrorMessage(result.message || "Registrasi gagal");
+			}
+		} catch (error: any) {
+			setErrorMessage(error?.response?.data?.message || "Terjadi kesalahan");
+		} finally {
+			setIsLoading(false);
+		}
 	};
 
 	return (
@@ -61,6 +78,11 @@ export default function RegisterPage() {
 				</div>
 
 				<div className="bg-white rounded-xl shadow-sm border p-6 md:p-8">
+					{errorMessage && (
+						<div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-600">
+							{errorMessage}
+						</div>
+					)}
 					<form onSubmit={handleSubmit} className="space-y-5">
 						<div className="space-y-2">
 							<Label htmlFor="fullName">Nama Lengkap</Label>
@@ -112,9 +134,9 @@ export default function RegisterPage() {
 									onClick={() => setShowPassword(!showPassword)}
 								>
 									{showPassword ? (
-										<EyeOff className="h-4 w-4 text-gray-400" />
-									) : (
 										<Eye className="h-4 w-4 text-gray-400" />
+									) : (
+										<EyeOff className="h-4 w-4 text-gray-400" />
 									)}
 								</Button>
 							</div>
@@ -173,9 +195,9 @@ export default function RegisterPage() {
 									onClick={() => setShowConfirmPassword(!showConfirmPassword)}
 								>
 									{showConfirmPassword ? (
-										<EyeOff className="h-4 w-4 text-gray-400" />
-									) : (
 										<Eye className="h-4 w-4 text-gray-400" />
+									) : (
+										<EyeOff className="h-4 w-4 text-gray-400" />
 									)}
 								</Button>
 							</div>
@@ -201,13 +223,13 @@ export default function RegisterPage() {
 								}
 								className="mt-0.5"
 							/>
-							<Label htmlFor="agreeTerms" className="text-sm font-normal leading-normal">
-								Saya setuju dengan
-								<Link href="#" className="text-primary hover:underline">
+							<Label htmlFor="agreeTerms" className="text-sm font-normal leading-normal inline">
+								Saya setuju dengan{" "}
+								<Link href="#" className="text-primary hover:underline font-semibold">
 									Syarat & Ketentuan
-								</Link>
-								dan
-								<Link href="#" className="text-primary hover:underline">
+								</Link>{" "}
+								dan{" "}
+								<Link href="#" className="text-primary hover:underline font-semibold">
 									Kebijakan Privasi
 								</Link>
 							</Label>
