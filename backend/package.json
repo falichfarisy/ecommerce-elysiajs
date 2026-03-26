@@ -6,11 +6,13 @@
     "dev": "bun run --watch src/index.ts"
   },
   "dependencies": {
+    "@elysiajs/cors": "^1.4.1",
     "@sinclair/typebox": "^0.34.48",
     "axios": "^1.13.6",
     "bcrypt": "^6.0.0",
     "better-auth": "^1.5.5",
     "better-sqlite3": "^12.8.0",
+    "cors": "^2.8.6",
     "drizzle-orm": "^0.45.1",
     "elysia": "latest",
     "elysia-mcp": "^0.1.1",
