@@ -1,4 +1,5 @@
 import { Elysia } from "elysia";
+import { cors } from "@elysiajs/cors";
 import { productsModule } from "./modules/products";
 import { authModule } from "./modules/auth";
 import { cartModule } from "./modules/cart";
@@ -13,6 +14,11 @@ const limiter = rateLimit({
 });
 
 const app = new Elysia()
+	.use(cors({
+		origin: ["http://localhost:3000", "http://localhost:3001", "http://localhost:3002"],
+		methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+		credentials: true,
+	}))
 	.use(logixlysia({
 		config: {
 			showStartupMessage: true,
