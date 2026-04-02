@@ -1,6 +1,6 @@
 import { Elysia, t } from "elysia";
 import { db, products, type NewProduct, type Product } from "../../db";
-import { eq, like, and, or, desc, asc, ge, le, sql } from "drizzle-orm";
+import { eq, like, and, or, desc, asc, gte, lte, sql } from "drizzle-orm";
 
 export const productsModule = new Elysia({ prefix: "/product" })
 	.get(
@@ -31,11 +31,11 @@ export const productsModule = new Elysia({ prefix: "/product" })
 			}
 
 			if (minPrice !== undefined) {
-				conditions.push(ge(products.price, minPrice));
+				conditions.push(gte(products.price, minPrice));
 			}
 
 			if (maxPrice !== undefined) {
-				conditions.push(le(products.price, maxPrice));
+				conditions.push(lte(products.price, maxPrice));
 			}
 
 			const whereClause = conditions.length > 0 ? and(...conditions) : undefined;

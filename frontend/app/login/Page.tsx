@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Eye, EyeOff, Loader2 } from "lucide-react";
+import { Eye, EyeOff, Loader2, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Label } from "@/components/ui/Label";
@@ -10,13 +11,11 @@ import { Checkbox } from "@/components/ui/Checkbox";
 import { Spinner } from "@/components/ui/Spinner";
 import { postData } from "../ApiConfig";
 
-type LoginProps = {
-	onClick: () => void;
-};
-
-export default function LoginPage({ onClick }: LoginProps) {
+export default function LoginPage({ onClose }: { onClose?: () => void }) {
+	const router = useRouter();
 	const [showPassword, setShowPassword] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
+	const [error, setError] = useState("");
 	const [formData, setFormData] = useState({
 		email: "",
 		password: "",
@@ -25,7 +24,7 @@ export default function LoginPage({ onClick }: LoginProps) {
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
-
+		setError("");
 		setIsLoading(true);
 
 		try {
@@ -35,29 +34,38 @@ export default function LoginPage({ onClick }: LoginProps) {
 			});
 
 			if (result.success) {
-				onClick();
+				if (onClose) {
+					onClose();
+				} else {
+					router.push("/");
+				}
+			} else {
+				setError(result.message || "Login failed");
 			}
-		} catch (error) {
-			console.error("Login failed:", error);
+		} catch (err: any) {
+			setError(err.response?.data?.message || "Something went wrong");
 		} finally {
 			setIsLoading(false);
 		}
 	};
 
 	return (
-		<div className="min-h-screen flex items-center justify-center bg-black/50 z-50 py-12 px-4">
-			{isLoading && <Spinner className="size-6" />}
-			<div className="max-w-md w-full">
-				{/* <div className="text-center mb-8">
-					<Link href="/" className="inline-flex items-center gap-2 mb-6">
-						<ShoppingCart className="h-8 w-8 text-primary" />
-						<span className="text-2xl font-bold">TokoKu</span>
-					</Link>
-					<h1 className="text-2xl font-bold text-gray-900">Selamat Datang</h1>
-					<p className="text-gray-600 mt-2">Masuk ke akun Anda</p>
-				</div> */}
-
+		<div className="w-full max-w-md">
 				<div className="bg-white rounded-xl shadow-sm border p-6 md:p-8">
+					<div className="flex justify-between items-center mb-4">
+						<h2 className="text-xl font-bold">Masuk</h2>
+						{onClose && (
+							<Button variant="ghost" size="icon" onClick={onClose}>
+								<span className="text-xl">×</span>
+							</Button>
+						)}
+					</div>
+					{error && (
+						<div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg flex items-center gap-2 text-red-700 text-sm">
+							<AlertCircle className="h-4 w-4" />
+							{error}
+						</div>
+					)}
 					<form
 						onSubmit={handleSubmit}
 						className="space-y-5">

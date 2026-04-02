@@ -7,8 +7,9 @@ import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Card, CardContent, CardFooter } from "@/components/ui/Card";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/Carousel";
-import { useState } from "react";
 import LoginPage from "@/app/login/Page";
+import { useState, useEffect } from "react";
+import { getData } from "../ApiConfig";
 
 const categories = [
 	{ name: "Elektronik", icon: "📱", count: 1234 },
@@ -74,11 +75,38 @@ const formatPrice = (price: number) => {
 
 export default function HomePage() {
 	const [isLogin, setIsLogin] = useState(false);
+	const [isLoggedIn, setIsLoggedIn] = useState(false);
+	const [isLoading, setIsLoading] = useState(true);
+
+	useEffect(() => {
+		const checkAuth = async () => {
+			try {
+				const result = await getData("/api/auth/get-session");
+				setIsLoggedIn(!!result);
+			} catch {
+				setIsLoggedIn(false);
+			} finally {
+				setIsLoading(false);
+			}
+		};
+		checkAuth();
+	}, []);
+
+	const handleLoginSuccess = () => {
+		setIsLogin(false);
+		setIsLoggedIn(true);
+	};
+
+	if (isLoading) return null;
+
 	return (
 		<div className="min-h-screen flex flex-col bg-gray-50">
 			{isLogin && (
 				<div className="fixed inset-0 z-60 flex items-center justify-center">
-					<LoginPage onClick={() => setIsLogin(false)} />
+					<div className="absolute inset-0 bg-black/50" onClick={() => setIsLogin(false)} />
+					<div className="relative z-10">
+						<LoginPage onClose={() => setIsLogin(false)} />
+					</div>
 				</div>
 			)}
 			<header className="sticky top-0 z-50 bg-white border-b shadow-sm">
@@ -123,16 +151,20 @@ export default function HomePage() {
 									3
 								</span>
 							</Button>
-							<div className="hidden md:flex items-center gap-2 ml-2">
-								<Button
-									onClick={() => setIsLogin(true)}
-									variant="outline">
-									Masuk
-								</Button>
-								<Button asChild>
-									<Link href="/register">Daftar</Link>
-								</Button>
-							</div>
+							<div className="flex items-center gap-2">
+							{isLoggedIn ? (
+								<Button variant="outline">Akun</Button>
+							) : (
+								<>
+									<Button onClick={() => setIsLogin(true)} variant="outline">
+										Masuk
+									</Button>
+									<Button asChild>
+										<Link href="/register">Daftar</Link>
+									</Button>
+								</>
+							)}
+						</div>
 						</div>
 					</div>
 

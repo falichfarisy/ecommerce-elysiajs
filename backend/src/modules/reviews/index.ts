@@ -1,43 +1,39 @@
 import { Elysia, t } from "elysia";
-import { db } from "../../db";
-import { sql, eq, and } from "drizzle-orm";
+import { db, reviews } from "../../db";
+import { eq, desc } from "drizzle-orm";
 import { authMiddleware } from "../auth";
-import { products } from "../../db/schema";
-
-const reviews = db.schema("reviews");
-const reviewSchema = {
-	id: t.Number(),
-	productId: t.Number(),
-	userId: t.String(),
-	rating: t.Number(),
-	comment: t.Optional(t.String()),
-	createdAt: t.Date(),
-};
 
 export const reviewModule = new Elysia({ prefix: "/reviews" })
 	.use(authMiddleware)
 
 	.get("/product/:productId", async ({ params, set }) => {
 		const productId = Number(params.productId);
-		const reviewsData = await db.execute(
-			sql`SELECT * FROM reviews WHERE product_id = ${productId} ORDER BY created_at DESC`
-		);
+		const reviewsData = await db
+			.select()
+			.from(reviews)
+			.where(eq(reviews.productId, productId))
+			.orderBy(desc(reviews.createdAt));
 
 		if (!reviewsData.length) {
 			set.status = 404;
 			return { success: false, message: "No reviews found" };
 		}
 
-		const avgRating = await db.execute(
-			sql`SELECT AVG(rating) as avg, COUNT(*) as count FROM reviews WHERE product_id = ${productId}`
-		);
+		const avgResult = await db
+			.select({ avg: reviews.rating })
+			.from(reviews)
+			.where(eq(reviews.productId, productId));
+
+		const avgRating = avgResult.length
+			? (avgResult.reduce((sum, r) => sum + r.rating, 0) / avgResult.length).toFixed(1)
+			: "0";
 
 		return {
 			success: true,
 			data: {
 				reviews: reviewsData,
-				averageRating: Number(avgRating[0]?.avg || 0).toFixed(1),
-				totalReviews: Number(avgRating[0]?.count || 0),
+				averageRating: avgRating,
+				totalReviews: avgResult.length,
 			},
 		};
 	})
@@ -62,11 +58,15 @@ export const reviewModule = new Elysia({ prefix: "/reviews" })
 				return { success: false, message: "Rating must be between 1 and 5" };
 			}
 
-			const result = await db.execute(
-				sql`INSERT INTO reviews (product_id, user_id, rating, comment, created_at)
-					VALUES (${productId}, ${user.id}, ${rating}, ${comment || null}, NOW())
-					RETURNING *`
-			);
+			const result = await db
+				.insert(reviews)
+				.values({
+					productId,
+					userId: user.id,
+					rating,
+					comment,
+				})
+				.returning();
 
 			return { success: true, data: result[0] };
 		},
@@ -89,15 +89,16 @@ export const reviewModule = new Elysia({ prefix: "/reviews" })
 		const params = context.params as { id: string };
 		const reviewId = Number(params.id);
 
-		const existing = await db.execute(
-			sql`SELECT * FROM reviews WHERE id = ${reviewId} AND user_id = ${user.id}`
-		);
+		const existing = await db
+			.select()
+			.from(reviews)
+			.where(eq(reviews.id, reviewId));
 
-		if (!existing.length) {
+		if (!existing[0] || existing[0].userId !== user.id) {
 			context.set.status = 404;
 			return { success: false, message: "Review not found" };
 		}
 
-		await db.execute(sql`DELETE FROM reviews WHERE id = ${reviewId}`);
+		await db.delete(reviews).where(eq(reviews.id, reviewId));
 		return { success: true, message: "Review deleted" };
 	});
