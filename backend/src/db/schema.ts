@@ -157,6 +157,34 @@ export const orderItems = pgTable("order_items", {
 		.notNull(),
 });
 
+export const reviews = pgTable("reviews", {
+	id: integer("id").primaryKey({ autoIncrement: true }),
+	productId: integer("product_id")
+		.notNull()
+		.references(() => products.id, { onDelete: "cascade" }),
+	userId: text("user_id")
+		.notNull()
+		.references(() => user.id, { onDelete: "cascade" }),
+	rating: integer("rating").notNull(),
+	comment: text("comment"),
+	createdAt: timestamp("created_at", { mode: "date" })
+		.default(sql`now()`)
+		.notNull(),
+});
+
+export const wishlists = pgTable("wishlists", {
+	id: integer("id").primaryKey({ autoIncrement: true }),
+	userId: text("user_id")
+		.notNull()
+		.references(() => user.id, { onDelete: "cascade" }),
+	productId: integer("product_id")
+		.notNull()
+		.references(() => products.id, { onDelete: "cascade" }),
+	createdAt: timestamp("created_at", { mode: "date" })
+		.default(sql`now()`)
+		.notNull(),
+});
+
 export const userRelations = relations(user, ({ one }) => ({
 	profile: one(userProfile, {
 		fields: [user.id],
@@ -187,5 +215,7 @@ export type Cart = typeof carts.$inferSelect;
 export type NewCart = typeof carts.$inferInsert;
 export type Order = typeof orders.$inferSelect;
 export type NewOrder = typeof orders.$inferInsert;
+export type Review = typeof reviews.$inferSelect;
+export type NewReview = typeof reviews.$inferInsert;
 export type OrderItem = typeof orderItems.$inferSelect;
 export type NewOrderItem = typeof orderItems.$inferInsert;

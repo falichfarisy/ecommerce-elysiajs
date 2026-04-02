@@ -1,5 +1,6 @@
 import { Elysia } from "elysia";
 import { cors } from "@elysiajs/cors";
+import { openapi } from "@elysiajs/openapi";
 import { productsModule } from "./modules/products";
 import { authModule } from "./modules/auth";
 import { cartModule } from "./modules/cart";
@@ -7,6 +8,12 @@ import { ordersModule } from "./modules/orders";
 import logixlysia from "logixlysia";
 import { profileModule } from "./modules/profile";
 import { rateLimit } from "elysia-rate-limit";
+import { paymentModule } from "./modules/payment";
+import { emailModule } from "./modules/email";
+import { rbacModule } from "./modules/rbac";
+import { inventoryModule } from "./modules/inventory";
+import { reviewModule } from "./modules/reviews";
+import { wishlistModule } from "./modules/wishlist";
 
 const limiter = rateLimit({
 	duration: 60000,
@@ -27,6 +34,26 @@ const app = new Elysia()
 			logFilePath: './logs/app.log'
 		}
 	}))
+	.use(openapi({
+		documentation: {
+			info: {
+				title: "E-Commerce API",
+				version: "1.0.0",
+				description: "E-Commerce REST API with PostgreSQL",
+			},
+			tags: [
+				{ name: "Auth", description: "Authentication endpoints" },
+				{ name: "Products", description: "Product management" },
+				{ name: "Cart", description: "Shopping cart" },
+				{ name: "Orders", description: "Order management" },
+				{ name: "Payment", description: "Payment processing" },
+				{ name: "RBAC", description: "Role-based access control" },
+				{ name: "Inventory", description: "Inventory management" },
+				{ name: "Reviews", description: "Product reviews and ratings" },
+				{ name: "Wishlist", description: "User wishlist" },
+			],
+		},
+	}))
 	.onError(({ code, error, status }) => {
 		if (code === "VALIDATION") {
 			return status(400, { success: false, message: String(error) });
@@ -40,10 +67,12 @@ const app = new Elysia()
 		message: "E-Commerce API",
 		version: "1.0.0",
 		endpoints: {
-			auth: ["/auth/register", "/auth/login"],
-			products: ["/products", "/products/:id"],
+			auth: ["/api/auth/register", "/api/auth/sign-in"],
+			products: ["/product", "/product/:id"],
 			cart: ["/cart"],
 			orders: ["/orders", "/orders/:id"],
+			payment: ["/payment/create-payment-intent"],
+			docs: ["/openapi", "/swagger"],
 		},
 	}))
 	.use(limiter)
@@ -52,6 +81,12 @@ const app = new Elysia()
 	.use(cartModule)
 	.use(ordersModule)
 	.use(profileModule)
+	.use(paymentModule)
+	.use(emailModule)
+	.use(rbacModule)
+	.use(inventoryModule)
+	.use(reviewModule)
+	.use(wishlistModule)
 	.listen(3001);
 
 export default app;

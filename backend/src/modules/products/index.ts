@@ -1,12 +1,103 @@
 import { Elysia, t } from "elysia";
 import { db, products, type NewProduct, type Product } from "../../db";
-import { eq } from "drizzle-orm";
+import { eq, like, and, or, desc, asc, ge, le, sql } from "drizzle-orm";
 
 export const productsModule = new Elysia({ prefix: "/product" })
-	.get("/", async () => {
-		const allProducts = await db.select().from(products);
-		return { success: true, data: allProducts };
-	})
+	.get(
+		"/",
+		async ({ query, set }) => {
+			const page = Number(query.page) || 1;
+			const limit = Number(query.limit) || 20;
+			const search = query.search as string | undefined;
+			const category = query.category as string | undefined;
+			const minPrice = query.minPrice ? Number(query.minPrice) : undefined;
+			const maxPrice = query.maxPrice ? Number(query.maxPrice) : undefined;
+			const sortBy = (query.sortBy as string) || "createdAt";
+			const sortOrder = (query.sortOrder as string) || "desc";
+
+			const conditions = [];
+
+			if (search) {
+				conditions.push(
+					or(
+						like(products.name, `%${search}%`),
+						like(products.description, `%${search}%`)
+					)
+				);
+			}
+
+			if (category) {
+				conditions.push(eq(products.category, category));
+			}
+
+			if (minPrice !== undefined) {
+				conditions.push(ge(products.price, minPrice));
+			}
+
+			if (maxPrice !== undefined) {
+				conditions.push(le(products.price, maxPrice));
+			}
+
+			const whereClause = conditions.length > 0 ? and(...conditions) : undefined;
+
+			const offset = (page - 1) * limit;
+			const sortColumn = products[sortBy as keyof typeof products] || products.createdAt;
+			const orderFn = sortOrder === "asc" ? asc : desc;
+
+			const [allProducts, totalCount] = await Promise.all([
+				db
+					.select()
+					.from(products)
+					.where(whereClause)
+					.limit(limit)
+					.offset(offset)
+					.orderBy(orderFn(sortColumn)),
+				db
+					.select({ count: sql<number>`count(*)` })
+					.from(products)
+					.where(whereClause),
+			]);
+
+			return {
+				success: true,
+				data: allProducts,
+				pagination: {
+					page,
+					limit,
+					total: totalCount[0]?.count || 0,
+					totalPages: Math.ceil((totalCount[0]?.count || 0) / limit),
+				},
+			};
+		},
+		{
+			query: t.Object({
+				page: t.Optional(t.Number()),
+				limit: t.Optional(t.Number()),
+				search: t.Optional(t.String()),
+				category: t.Optional(t.String()),
+				minPrice: t.Optional(t.Number()),
+				maxPrice: t.Optional(t.Number()),
+				sortBy: t.Optional(t.Union([t.Literal("price"), t.Literal("name"), t.Literal("createdAt")])),
+				sortOrder: t.Optional(t.Union([t.Literal("asc"), t.Literal("desc")])),
+			}),
+		},
+	)
+
+	.get(
+		"/categories",
+		async () => {
+			const categories = await db
+				.selectDistinct({ category: products.category })
+				.from(products)
+				.where(products.category != null);
+
+			return {
+				success: true,
+				data: categories.map((c) => c.category).filter(Boolean),
+			};
+		},
+	)
+
 	.get("/:id", async ({ params, set }) => {
 		const product = await db
 			.select()
