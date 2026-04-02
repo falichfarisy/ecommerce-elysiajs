@@ -50,13 +50,13 @@ export default function LoginPage({ onClose }: { onClose?: () => void }) {
 	};
 
 	return (
-		<div className="w-full max-w-md">
-				<div className="bg-white rounded-xl shadow-sm border p-6 md:p-8">
-					<div className="flex justify-between items-center mb-4">
-						<h2 className="text-xl font-bold">Masuk</h2>
+		<div className="w-full max-w-lg">
+				<div className="bg-white rounded-2xl shadow-lg border p-8 md:p-12">
+					<div className="flex justify-between items-center mb-6">
+						<h2 className="text-2xl font-bold">Masuk</h2>
 						{onClose && (
 							<Button variant="ghost" size="icon" onClick={onClose}>
-								<span className="text-xl">×</span>
+								<span className="text-2xl">×</span>
 							</Button>
 						)}
 					</div>
@@ -68,9 +68,9 @@ export default function LoginPage({ onClose }: { onClose?: () => void }) {
 					)}
 					<form
 						onSubmit={handleSubmit}
-						className="space-y-5">
-						<div className="space-y-2">
-							<Label htmlFor="email">Email</Label>
+						className="space-y-6">
+						<div className="space-y-3">
+							<Label htmlFor="email" className="text-base">Email</Label>
 							<Input
 								id="email"
 								type="email"
@@ -78,11 +78,12 @@ export default function LoginPage({ onClose }: { onClose?: () => void }) {
 								value={formData.email}
 								onChange={(e) => setFormData({ ...formData, email: e.target.value })}
 								required
+								className="h-12"
 							/>
 						</div>
 
-						<div className="space-y-2">
-							<Label htmlFor="password">Password</Label>
+						<div className="space-y-3">
+							<Label htmlFor="password" className="text-base">Password</Label>
 							<div className="relative">
 								<Input
 									id="password"
@@ -91,7 +92,7 @@ export default function LoginPage({ onClose }: { onClose?: () => void }) {
 									value={formData.password}
 									onChange={(e) => setFormData({ ...formData, password: e.target.value })}
 									required
-									className="pr-10"
+									className="pr-10 h-12"
 								/>
 								<Button
 									type="button"
@@ -130,25 +131,25 @@ export default function LoginPage({ onClose }: { onClose?: () => void }) {
 
 						<Button
 							type="submit"
-							className="w-full"
+							className="w-full h-12 text-lg"
 							disabled={isLoading}>
-							{isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+							{isLoading && <Loader2 className="mr-2 h-5 w-5 animate-spin" />}
 							Masuk
 						</Button>
 					</form>
 
-					<div className="relative my-6">
+					<div className="relative my-8">
 						<div className="absolute inset-0 flex items-center">
 							<span className="w-full border-t" />
 						</div>
-						<div className="relative flex justify-center text-xs uppercase">
-							<span className="bg-white px-2 text-gray-500">atau</span>
+						<div className="relative flex justify-center text-sm uppercase">
+							<span className="bg-white px-4 text-gray-500">atau</span>
 						</div>
 					</div>
 
 					<Button
 						variant="outline"
-						className="w-full">
+						className="w-full h-12 text-base">
 						<svg
 							className="mr-2 h-4 w-4"
 							viewBox="0 0 24 24">
@@ -181,6 +182,5 @@ export default function LoginPage({ onClose }: { onClose?: () => void }) {
 					</p>
 				</div>
 			</div>
-		</div>
 	);
 }
