@@ -3,10 +3,12 @@
 import Link from "next/link";
 import { ShoppingCart, Search, Menu, Heart, Star, ChevronRight } from "lucide-react";
 import * as React from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+import { Button } from "@/components/ui/Button";
+import { Input } from "@/components/ui/Input";
+import { Card, CardContent, CardFooter } from "@/components/ui/Card";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/Carousel";
+import { useState } from "react";
+import LoginPage from "@/app/login/Page";
 
 const categories = [
 	{ name: "Elektronik", icon: "📱", count: 1234 },
@@ -20,10 +22,42 @@ const categories = [
 ];
 
 const products = [
-	{ id: 1, name: "Wireless Headphone Pro", price: 299000, originalPrice: 499000, rating: 4.5, reviews: 234, image: "🎧" },
-	{ id: 2, name: "Smart Watch Series 5", price: 899000, originalPrice: 1299000, rating: 4.8, reviews: 567, image: "⌚" },
-	{ id: 3, name: "Kemeja Casual Premium", price: 189000, originalPrice: 289000, rating: 4.2, reviews: 123, image: "👔" },
-	{ id: 4, name: "Lipstick Matte Collection", price: 99000, originalPrice: 149000, rating: 4.6, reviews: 456, image: "💄" },
+	{
+		id: 1,
+		name: "Wireless Headphone Pro",
+		price: 299000,
+		originalPrice: 499000,
+		rating: 4.5,
+		reviews: 234,
+		image: "🎧",
+	},
+	{
+		id: 2,
+		name: "Smart Watch Series 5",
+		price: 899000,
+		originalPrice: 1299000,
+		rating: 4.8,
+		reviews: 567,
+		image: "⌚",
+	},
+	{
+		id: 3,
+		name: "Kemeja Casual Premium",
+		price: 189000,
+		originalPrice: 289000,
+		rating: 4.2,
+		reviews: 123,
+		image: "👔",
+	},
+	{
+		id: 4,
+		name: "Lipstick Matte Collection",
+		price: 99000,
+		originalPrice: 149000,
+		rating: 4.6,
+		reviews: 456,
+		image: "💄",
+	},
 	{ id: 5, name: "Portable Blender", price: 159000, originalPrice: 249000, rating: 4.3, reviews: 89, image: "🥤" },
 	{ id: 6, name: "Running Shoes Sport", price: 399000, originalPrice: 599000, rating: 4.7, reviews: 321, image: "👟" },
 	{ id: 7, name: "Novel Bestseller 2024", price: 79000, originalPrice: 120000, rating: 4.4, reviews: 678, image: "📖" },
@@ -39,13 +73,22 @@ const formatPrice = (price: number) => {
 };
 
 export default function HomePage() {
+	const [isLogin, setIsLogin] = useState(false);
 	return (
 		<div className="min-h-screen flex flex-col bg-gray-50">
+			{isLogin && (
+				<div className="fixed inset-0 z-60 flex items-center justify-center">
+					<LoginPage onClick={() => setIsLogin(false)} />
+				</div>
+			)}
 			<header className="sticky top-0 z-50 bg-white border-b shadow-sm">
 				<div className="max-w-7xl mx-auto px-4 py-3">
 					<div className="flex items-center justify-between gap-4">
 						<div className="flex items-center gap-2">
-							<Button variant="ghost" size="icon" className="md:hidden">
+							<Button
+								variant="ghost"
+								size="icon"
+								className="md:hidden">
 								<Menu className="h-5 w-5" />
 							</Button>
 							<span className="text-xl font-bold text-primary">TokoKu</span>
@@ -65,18 +108,26 @@ export default function HomePage() {
 						</div>
 
 						<div className="flex items-center gap-2">
-							<Button variant="ghost" size="icon" className="hidden md:flex">
+							<Button
+								variant="ghost"
+								size="icon"
+								className="hidden md:flex">
 								<Heart className="h-5 w-5" />
 							</Button>
-							<Button variant="outline" size="icon" className="relative">
+							<Button
+								variant="outline"
+								size="icon"
+								className="relative">
 								<ShoppingCart className="h-5 w-5" />
 								<span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-red-500 text-white text-xs flex items-center justify-center">
 									3
 								</span>
 							</Button>
 							<div className="hidden md:flex items-center gap-2 ml-2">
-								<Button variant="outline" asChild>
-									<Link href="/login">Masuk</Link>
+								<Button
+									onClick={() => setIsLogin(true)}
+									variant="outline">
+									Masuk
 								</Button>
 								<Button asChild>
 									<Link href="/register">Daftar</Link>
@@ -102,7 +153,9 @@ export default function HomePage() {
 
 			<section className="w-full bg-linear-to-r from-primary/10 to-primary/5 py-8">
 				<div className="max-w-7xl mx-auto px-4">
-					<Carousel className="w-full" opts={{ loop: true }}>
+					<Carousel
+						className="w-full"
+						opts={{ loop: true }}>
 						<CarouselContent>
 							<CarouselItem>
 								<div className="relative h-64 md:h-80 lg:h-96 rounded-2xl overflow-hidden bg-linear-to-r from-blue-600 to-blue-400 flex items-center">
@@ -111,20 +164,18 @@ export default function HomePage() {
 										<span className="inline-block px-3 py-1 bg-white/20 rounded-full text-white text-sm mb-4">
 											🔥 Promo Terbatas
 										</span>
-										<h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-											Diskon Up to 50%
-										</h2>
+										<h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Diskon Up to 50%</h2>
 										<p className="text-white/90 mb-6 hidden md:block">
 											Belanja hemat untuk koleksi elektronik terbaru dan terlengkap
 										</p>
-										<Button size="lg" className="bg-white text-blue-600 hover:bg-white/90">
+										<Button
+											size="lg"
+											className="bg-white text-blue-600 hover:bg-white/90">
 											Belanja Sekarang
 											<ChevronRight className="ml-2 h-4 w-4" />
 										</Button>
 									</div>
-									<div className="hidden md:block absolute right-16 text-8xl opacity-50">
-										🛒
-									</div>
+									<div className="hidden md:block absolute right-16 text-8xl opacity-50">🛒</div>
 								</div>
 							</CarouselItem>
 							<CarouselItem>
@@ -134,20 +185,18 @@ export default function HomePage() {
 										<span className="inline-block px-3 py-1 bg-white/20 rounded-full text-white text-sm mb-4">
 											✨ Fashion Week
 										</span>
-										<h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-											Koleksi Fashion 2024
-										</h2>
+										<h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Koleksi Fashion 2024</h2>
 										<p className="text-white/90 mb-6 hidden md:block">
 											Tampil stylish dengan koleksi fashion terbaru dan terpercaya
 										</p>
-										<Button size="lg" className="bg-white text-purple-600 hover:bg-white/90">
+										<Button
+											size="lg"
+											className="bg-white text-purple-600 hover:bg-white/90">
 											Lihat Koleksi
 											<ChevronRight className="ml-2 h-4 w-4" />
 										</Button>
 									</div>
-									<div className="hidden md:block absolute right-16 text-8xl opacity-50">
-										👗
-									</div>
+									<div className="hidden md:block absolute right-16 text-8xl opacity-50">👗</div>
 								</div>
 							</CarouselItem>
 							<CarouselItem>
@@ -157,20 +206,18 @@ export default function HomePage() {
 										<span className="inline-block px-3 py-1 bg-white/20 rounded-full text-white text-sm mb-4">
 											🎁 Gratis Ongkir
 										</span>
-										<h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-											Bebas Ongkir!
-										</h2>
+										<h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Bebas Ongkir!</h2>
 										<p className="text-white/90 mb-6 hidden md:block">
 											Nikmati gratis ongkir untuk pembelian minimal Rp 100.000
 										</p>
-										<Button size="lg" className="bg-white text-orange-500 hover:bg-white/90">
+										<Button
+											size="lg"
+											className="bg-white text-orange-500 hover:bg-white/90">
 											Klaim Sekarang
 											<ChevronRight className="ml-2 h-4 w-4" />
 										</Button>
 									</div>
-									<div className="hidden md:block absolute right-16 text-8xl opacity-50">
-										📦
-									</div>
+									<div className="hidden md:block absolute right-16 text-8xl opacity-50">📦</div>
 								</div>
 							</CarouselItem>
 						</CarouselContent>
@@ -184,7 +231,9 @@ export default function HomePage() {
 				<div className="max-w-7xl mx-auto px-4">
 					<div className="flex items-center justify-between mb-6">
 						<h2 className="text-xl font-bold">Kategori</h2>
-						<Button variant="link" className="text-primary">
+						<Button
+							variant="link"
+							className="text-primary">
 							Lihat Semua
 						</Button>
 					</div>
@@ -192,17 +241,12 @@ export default function HomePage() {
 						{categories.map((category) => (
 							<button
 								key={category.name}
-								className="flex flex-col items-center p-4 rounded-xl hover:bg-gray-100 transition-colors group"
-							>
-								<div className="text-4xl mb-2 group-hover:scale-110 transition-transform">
-									{category.icon}
-								</div>
+								className="flex flex-col items-center p-4 rounded-xl hover:bg-gray-100 transition-colors group">
+								<div className="text-4xl mb-2 group-hover:scale-110 transition-transform">{category.icon}</div>
 								<span className="text-sm font-medium text-center text-gray-700 group-hover:text-primary">
 									{category.name}
 								</span>
-								<span className="text-xs text-gray-400 mt-1">
-									{category.count.toLocaleString()} item
-								</span>
+								<span className="text-xs text-gray-400 mt-1">{category.count.toLocaleString()} item</span>
 							</button>
 						))}
 					</div>
@@ -220,41 +264,11 @@ export default function HomePage() {
 								<span className="font-bold">02:45:30</span>
 							</div>
 						</div>
-						<Button variant="outline" className="border-red-500 text-red-500 hover:bg-red-50">
+						<Button
+							variant="outline"
+							className="border-red-500 text-red-500 hover:bg-red-50">
 							Lihat Semua
 						</Button>
-					</div>
-					<div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-						{products.slice(0, 6).map((product) => (
-							<Link key={product.id} href={`/product/${product.id}`}>
-								<Card className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer h-full">
-									<div className="aspect-square bg-gray-100 flex items-center justify-center text-6xl">
-										{product.image}
-									</div>
-									<CardContent className="p-3">
-										<h3 className="font-medium text-sm line-clamp-2 mb-2 h-10">
-											{product.name}
-										</h3>
-										<div className="flex items-center gap-1 text-sm">
-											<Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
-											<span className="font-medium">{product.rating}</span>
-											<span className="text-gray-400">({product.reviews})</span>
-										</div>
-									</CardContent>
-									<CardFooter className="p-3 pt-0">
-										<div className="w-full">
-											<p className="font-bold text-primary">{formatPrice(product.price)}</p>
-											<p className="text-xs text-gray-400 line-through">
-												{formatPrice(product.originalPrice)}
-											</p>
-											<div className="mt-1 bg-red-100 text-red-600 text-xs px-2 py-0.5 rounded inline-block">
-												{Math.round((1 - product.price / product.originalPrice) * 100)}% OFF
-											</div>
-										</div>
-									</CardFooter>
-								</Card>
-							</Link>
-						))}
 					</div>
 				</div>
 			</section>
@@ -263,13 +277,17 @@ export default function HomePage() {
 				<div className="max-w-7xl mx-auto px-4">
 					<div className="flex items-center justify-between mb-6">
 						<h2 className="text-xl font-bold">Produk Untukmu</h2>
-						<Button variant="link" className="text-primary">
+						<Button
+							variant="link"
+							className="text-primary">
 							Lihat Semua
 						</Button>
 					</div>
 					<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
 						{products.map((product) => (
-							<Link key={product.id} href={`/product/${product.id}`}>
+							<Link
+								key={product.id}
+								href={`/product/${product.id}`}>
 								<Card className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer group h-full">
 									<div className="relative aspect-square bg-gray-100 flex items-center justify-center text-6xl group-hover:scale-105 transition-transform">
 										{product.image}
@@ -279,27 +297,24 @@ export default function HomePage() {
 											className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
 											onClick={(e) => {
 												e.preventDefault();
-											}}
-										>
+											}}>
 											<Heart className="h-4 w-4" />
 										</Button>
 									</div>
 									<CardContent className="p-4">
-										<h3 className="font-medium text-sm line-clamp-2 mb-2 h-10">
-											{product.name}
-										</h3>
+										<h3 className="font-medium text-sm line-clamp-2 mb-2 h-10">{product.name}</h3>
 										<div className="flex items-center gap-1 text-sm mb-2">
 											<Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
 											<span className="font-medium">{product.rating}</span>
 											<span className="text-gray-400">({product.reviews})</span>
 										</div>
 										<p className="font-bold text-lg text-primary">{formatPrice(product.price)}</p>
-										<p className="text-xs text-gray-400 line-through">
-											{formatPrice(product.originalPrice)}
-										</p>
+										<p className="text-xs text-gray-400 line-through">{formatPrice(product.originalPrice)}</p>
 									</CardContent>
 									<CardFooter className="p-4 pt-0">
-										<Button className="w-full" size="sm">
+										<Button
+											className="w-full"
+											size="sm">
 											<ShoppingCart className="h-4 w-4 mr-2" />
 											Add to Cart
 										</Button>
@@ -320,13 +335,22 @@ export default function HomePage() {
 								Toko online terpercaya dengan berbagai produk berkualitas untuk kebutuhan sehari-hari Anda.
 							</p>
 							<div className="flex gap-3">
-								<Button size="icon" variant="ghost" className="bg-gray-800 hover:bg-gray-700">
+								<Button
+									size="icon"
+									variant="ghost"
+									className="bg-gray-800 hover:bg-gray-700">
 									<span className="text-lg">📘</span>
 								</Button>
-								<Button size="icon" variant="ghost" className="bg-gray-800 hover:bg-gray-700">
+								<Button
+									size="icon"
+									variant="ghost"
+									className="bg-gray-800 hover:bg-gray-700">
 									<span className="text-lg">📸</span>
 								</Button>
-								<Button size="icon" variant="ghost" className="bg-gray-800 hover:bg-gray-700">
+								<Button
+									size="icon"
+									variant="ghost"
+									className="bg-gray-800 hover:bg-gray-700">
 									<span className="text-lg">🐦</span>
 								</Button>
 							</div>
@@ -334,28 +358,100 @@ export default function HomePage() {
 						<div>
 							<h4 className="font-semibold mb-4">Layanan</h4>
 							<ul className="space-y-2 text-sm text-gray-400">
-								<li><a href="#" className="hover:text-white transition-colors">Bantuan</a></li>
-								<li><a href="#" className="hover:text-white transition-colors">Cara Pembelian</a></li>
-								<li><a href="#" className="hover:text-white transition-colors">Pengiriman</a></li>
-								<li><a href="#" className="hover:text-white transition-colors">Pengembalian</a></li>
+								<li>
+									<a
+										href="#"
+										className="hover:text-white transition-colors">
+										Bantuan
+									</a>
+								</li>
+								<li>
+									<a
+										href="#"
+										className="hover:text-white transition-colors">
+										Cara Pembelian
+									</a>
+								</li>
+								<li>
+									<a
+										href="#"
+										className="hover:text-white transition-colors">
+										Pengiriman
+									</a>
+								</li>
+								<li>
+									<a
+										href="#"
+										className="hover:text-white transition-colors">
+										Pengembalian
+									</a>
+								</li>
 							</ul>
 						</div>
 						<div>
 							<h4 className="font-semibold mb-4">Tentang Kami</h4>
 							<ul className="space-y-2 text-sm text-gray-400">
-								<li><a href="#" className="hover:text-white transition-colors">Profil</a></li>
-								<li><a href="#" className="hover:text-white transition-colors">Karir</a></li>
-								<li><a href="#" className="hover:text-white transition-colors">Blog</a></li>
-								<li><a href="#" className="hover:text-white transition-colors">Hubungi Kami</a></li>
+								<li>
+									<a
+										href="#"
+										className="hover:text-white transition-colors">
+										Profil
+									</a>
+								</li>
+								<li>
+									<a
+										href="#"
+										className="hover:text-white transition-colors">
+										Karir
+									</a>
+								</li>
+								<li>
+									<a
+										href="#"
+										className="hover:text-white transition-colors">
+										Blog
+									</a>
+								</li>
+								<li>
+									<a
+										href="#"
+										className="hover:text-white transition-colors">
+										Hubungi Kami
+									</a>
+								</li>
 							</ul>
 						</div>
 						<div>
 							<h4 className="font-semibold mb-4">Kategori</h4>
 							<ul className="space-y-2 text-sm text-gray-400">
-								<li><a href="#" className="hover:text-white transition-colors">Elektronik</a></li>
-								<li><a href="#" className="hover:text-white transition-colors">Fashion</a></li>
-								<li><a href="#" className="hover:text-white transition-colors">Kecantikan</a></li>
-								<li><a href="#" className="hover:text-white transition-colors">Rumah Tangga</a></li>
+								<li>
+									<a
+										href="#"
+										className="hover:text-white transition-colors">
+										Elektronik
+									</a>
+								</li>
+								<li>
+									<a
+										href="#"
+										className="hover:text-white transition-colors">
+										Fashion
+									</a>
+								</li>
+								<li>
+									<a
+										href="#"
+										className="hover:text-white transition-colors">
+										Kecantikan
+									</a>
+								</li>
+								<li>
+									<a
+										href="#"
+										className="hover:text-white transition-colors">
+										Rumah Tangga
+									</a>
+								</li>
 							</ul>
 						</div>
 					</div>

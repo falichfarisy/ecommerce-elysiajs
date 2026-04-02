@@ -3,9 +3,9 @@
 import { useState } from "react";
 import Link from "next/link";
 import { ShoppingCart, Loader2, Check, Mail } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/Button";
+import { Input } from "@/components/ui/Input";
+import { Label } from "@/components/ui/Label";
 
 export default function ForgotPasswordPage() {
 	const [email, setEmail] = useState("");

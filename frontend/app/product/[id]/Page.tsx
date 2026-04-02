@@ -16,8 +16,8 @@ import {
 	RotateCcw,
 	BadgeCheck,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { Button } from "@/components/ui/Button";
+import { Card, CardContent, CardFooter } from "@/components/ui/Card";
 
 const products = [
 	{ id: 1, name: "Wireless Headphone Pro", price: 299000, originalPrice: 499000, rating: 4.5, reviews: 234, image: "🎧", category: "Elektronik", brand: "SoundMax", stock: 15 },

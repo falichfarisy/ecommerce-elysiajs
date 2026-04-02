@@ -47,3 +47,7 @@ package-lock.json
 # env
 .env
 .env.*
+
+# docs (project gaps analysis)
+/docs/
+ecommerce-gaps.md

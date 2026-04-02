@@ -4,11 +4,11 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Eye, EyeOff, ShoppingCart, Loader2, Check, X } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Checkbox } from "@/components/ui/checkbox";
-import { postData } from "../api_config";
+import { Button } from "@/components/ui/Button";
+import { Input } from "@/components/ui/Input";
+import { Label } from "@/components/ui/Label";
+import { Checkbox } from "@/components/ui/Checkbox";
+import { postData } from "../ApiConfig";
 
 export default function RegisterPage() {
 	const router = useRouter();
@@ -32,9 +32,7 @@ export default function RegisterPage() {
 	];
 
 	const isPasswordValid = passwordRequirements.every((req) => req.met);
-	const doPasswordsMatch =
-		formData.password === formData.confirmPassword &&
-		formData.confirmPassword.length > 0;
+	const doPasswordsMatch = formData.password === formData.confirmPassword && formData.confirmPassword.length > 0;
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
@@ -50,7 +48,7 @@ export default function RegisterPage() {
 			const result = await postData("/api/auth/register", {
 				username: formData.fullName,
 				email: formData.email,
-				password: formData.password
+				password: formData.password,
 			});
 
 			if (result.success) {
@@ -69,7 +67,9 @@ export default function RegisterPage() {
 		<div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4">
 			<div className="max-w-md w-full">
 				<div className="text-center mb-8">
-					<Link href="/" className="inline-flex items-center gap-2 mb-6">
+					<Link
+						href="/"
+						className="inline-flex items-center gap-2 mb-6">
 						<ShoppingCart className="h-8 w-8 text-primary" />
 						<span className="text-2xl font-bold">TokoKu</span>
 					</Link>
@@ -83,7 +83,9 @@ export default function RegisterPage() {
 							{errorMessage}
 						</div>
 					)}
-					<form onSubmit={handleSubmit} className="space-y-5">
+					<form
+						onSubmit={handleSubmit}
+						className="space-y-5">
 						<div className="space-y-2">
 							<Label htmlFor="fullName">Nama Lengkap</Label>
 							<Input
@@ -91,9 +93,7 @@ export default function RegisterPage() {
 								type="text"
 								placeholder="John Doe"
 								value={formData.fullName}
-								onChange={(e) =>
-									setFormData({ ...formData, fullName: e.target.value })
-								}
+								onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
 								required
 							/>
 						</div>
@@ -105,9 +105,7 @@ export default function RegisterPage() {
 								type="email"
 								placeholder="nama@email.com"
 								value={formData.email}
-								onChange={(e) =>
-									setFormData({ ...formData, email: e.target.value })
-								}
+								onChange={(e) => setFormData({ ...formData, email: e.target.value })}
 								required
 							/>
 						</div>
@@ -120,9 +118,7 @@ export default function RegisterPage() {
 									type={showPassword ? "text" : "password"}
 									placeholder="••••••••"
 									value={formData.password}
-									onChange={(e) =>
-										setFormData({ ...formData, password: e.target.value })
-									}
+									onChange={(e) => setFormData({ ...formData, password: e.target.value })}
 									required
 									className="pr-10"
 								/>
@@ -131,8 +127,7 @@ export default function RegisterPage() {
 									variant="ghost"
 									size="icon"
 									className="absolute right-0 top-0 h-full px-3 hover:bg-transparent"
-									onClick={() => setShowPassword(!showPassword)}
-								>
+									onClick={() => setShowPassword(!showPassword)}>
 									{showPassword ? (
 										<Eye className="h-4 w-4 text-gray-400" />
 									) : (
@@ -145,26 +140,13 @@ export default function RegisterPage() {
 								{passwordRequirements.map((req, index) => (
 									<div
 										key={index}
-										className="flex items-center gap-2 text-xs"
-									>
+										className="flex items-center gap-2 text-xs">
 										{req.met ? (
 											<Check className="h-3 w-3 text-green-500" />
 										) : (
-											<X
-												className={`h-3 w-3 ${
-													formData.password.length > 0
-														? "text-gray-400"
-														: "text-gray-300"
-												}`}
-											/>
+											<X className={`h-3 w-3 ${formData.password.length > 0 ? "text-gray-400" : "text-gray-300"}`} />
 										)}
-										<span
-											className={
-												req.met ? "text-green-600" : "text-gray-500"
-											}
-										>
-											{req.label}
-										</span>
+										<span className={req.met ? "text-green-600" : "text-gray-500"}>{req.label}</span>
 									</div>
 								))}
 							</div>
@@ -192,8 +174,7 @@ export default function RegisterPage() {
 									variant="ghost"
 									size="icon"
 									className="absolute right-0 top-0 h-full px-3 hover:bg-transparent"
-									onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-								>
+									onClick={() => setShowConfirmPassword(!showConfirmPassword)}>
 									{showConfirmPassword ? (
 										<Eye className="h-4 w-4 text-gray-400" />
 									) : (
@@ -202,14 +183,8 @@ export default function RegisterPage() {
 								</Button>
 							</div>
 							{formData.confirmPassword.length > 0 && (
-								<p
-									className={`text-xs ${
-										doPasswordsMatch ? "text-green-600" : "text-red-500"
-									}`}
-								>
-									{doPasswordsMatch
-										? "Password cocok"
-										: "Password tidak cocok"}
+								<p className={`text-xs ${doPasswordsMatch ? "text-green-600" : "text-red-500"}`}>
+									{doPasswordsMatch ? "Password cocok" : "Password tidak cocok"}
 								</p>
 							)}
 						</div>
@@ -218,18 +193,22 @@ export default function RegisterPage() {
 							<Checkbox
 								id="agreeTerms"
 								checked={formData.agreeTerms}
-								onCheckedChange={(checked) =>
-									setFormData({ ...formData, agreeTerms: checked as boolean })
-								}
+								onCheckedChange={(checked) => setFormData({ ...formData, agreeTerms: checked as boolean })}
 								className="mt-0.5"
 							/>
-							<Label htmlFor="agreeTerms" className="text-sm font-normal leading-normal inline">
+							<Label
+								htmlFor="agreeTerms"
+								className="text-sm font-normal leading-normal inline">
 								Saya setuju dengan{" "}
-								<Link href="#" className="text-primary hover:underline font-semibold">
+								<Link
+									href="#"
+									className="text-primary hover:underline font-semibold">
 									Syarat & Ketentuan
 								</Link>{" "}
 								dan{" "}
-								<Link href="#" className="text-primary hover:underline font-semibold">
+								<Link
+									href="#"
+									className="text-primary hover:underline font-semibold">
 									Kebijakan Privasi
 								</Link>
 							</Label>
@@ -238,8 +217,7 @@ export default function RegisterPage() {
 						<Button
 							type="submit"
 							className="w-full"
-							disabled={isLoading || !isPasswordValid || !doPasswordsMatch || !formData.agreeTerms}
-						>
+							disabled={isLoading || !isPasswordValid || !doPasswordsMatch || !formData.agreeTerms}>
 							{isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
 							Daftar
 						</Button>
@@ -254,8 +232,12 @@ export default function RegisterPage() {
 						</div>
 					</div>
 
-					<Button variant="outline" className="w-full">
-						<svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">
+					<Button
+						variant="outline"
+						className="w-full">
+						<svg
+							className="mr-2 h-4 w-4"
+							viewBox="0 0 24 24">
 							<path
 								d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
 								fill="#4285F4"
@@ -279,7 +261,9 @@ export default function RegisterPage() {
 
 				<p className="mt-6 text-center text-sm text-gray-600">
 					Sudah punya akun?{" "}
-					<Link href="/login" className="text-primary hover:underline font-medium">
+					<Link
+						href="/login"
+						className="text-primary hover:underline font-medium">
 						Masuk
 					</Link>
 				</p>

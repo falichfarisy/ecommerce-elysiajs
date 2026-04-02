@@ -1,18 +1,20 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Eye, EyeOff, ShoppingCart, Loader2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Spinner } from "@/components/ui/spinner";
-import { postData } from "../api_config";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
+import { Button } from "@/components/ui/Button";
+import { Input } from "@/components/ui/Input";
+import { Label } from "@/components/ui/Label";
+import { Checkbox } from "@/components/ui/Checkbox";
+import { Spinner } from "@/components/ui/Spinner";
+import { postData } from "../ApiConfig";
 
-export default function LoginPage() {
-	const router = useRouter();
+type LoginProps = {
+	onClick: () => void;
+};
+
+export default function LoginPage({ onClick }: LoginProps) {
 	const [showPassword, setShowPassword] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
 	const [formData, setFormData] = useState({
@@ -33,7 +35,7 @@ export default function LoginPage() {
 			});
 
 			if (result.success) {
-				router.push("/");
+				onClick();
 			}
 		} catch (error) {
 			console.error("Login failed:", error);
@@ -43,20 +45,22 @@ export default function LoginPage() {
 	};
 
 	return (
-		<div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4">
-			{isLoading && <Spinner className="size-6"/>}
+		<div className="min-h-screen flex items-center justify-center bg-black/50 z-50 py-12 px-4">
+			{isLoading && <Spinner className="size-6" />}
 			<div className="max-w-md w-full">
-				<div className="text-center mb-8">
+				{/* <div className="text-center mb-8">
 					<Link href="/" className="inline-flex items-center gap-2 mb-6">
 						<ShoppingCart className="h-8 w-8 text-primary" />
 						<span className="text-2xl font-bold">TokoKu</span>
 					</Link>
 					<h1 className="text-2xl font-bold text-gray-900">Selamat Datang</h1>
 					<p className="text-gray-600 mt-2">Masuk ke akun Anda</p>
-				</div>
+				</div> */}
 
 				<div className="bg-white rounded-xl shadow-sm border p-6 md:p-8">
-					<form onSubmit={handleSubmit} className="space-y-5">
+					<form
+						onSubmit={handleSubmit}
+						className="space-y-5">
 						<div className="space-y-2">
 							<Label htmlFor="email">Email</Label>
 							<Input
@@ -64,9 +68,7 @@ export default function LoginPage() {
 								type="email"
 								placeholder="nama@email.com"
 								value={formData.email}
-								onChange={(e) =>
-									setFormData({ ...formData, email: e.target.value })
-								}
+								onChange={(e) => setFormData({ ...formData, email: e.target.value })}
 								required
 							/>
 						</div>
@@ -79,9 +81,7 @@ export default function LoginPage() {
 									type={showPassword ? "text" : "password"}
 									placeholder="••••••••"
 									value={formData.password}
-									onChange={(e) =>
-										setFormData({ ...formData, password: e.target.value })
-									}
+									onChange={(e) => setFormData({ ...formData, password: e.target.value })}
 									required
 									className="pr-10"
 								/>
@@ -90,8 +90,7 @@ export default function LoginPage() {
 									variant="ghost"
 									size="icon"
 									className="absolute right-0 top-0 h-full px-3 hover:bg-transparent"
-									onClick={() => setShowPassword(!showPassword)}
-								>
+									onClick={() => setShowPassword(!showPassword)}>
 									{showPassword ? (
 										<Eye className="h-4 w-4 text-gray-400" />
 									) : (
@@ -106,23 +105,25 @@ export default function LoginPage() {
 								<Checkbox
 									id="remember"
 									checked={formData.remember}
-									onCheckedChange={(checked) =>
-										setFormData({ ...formData, remember: checked as boolean })
-									}
+									onCheckedChange={(checked) => setFormData({ ...formData, remember: checked as boolean })}
 								/>
-								<Label htmlFor="remember" className="text-sm font-normal">
+								<Label
+									htmlFor="remember"
+									className="text-sm font-normal">
 									Ingat saya
 								</Label>
 							</div>
 							<Link
 								href="/forgot-password"
-								className="text-sm text-primary hover:underline"
-							>
+								className="text-sm text-primary hover:underline">
 								Lupa password?
 							</Link>
 						</div>
 
-						<Button type="submit" className="w-full" disabled={isLoading}>
+						<Button
+							type="submit"
+							className="w-full"
+							disabled={isLoading}>
 							{isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
 							Masuk
 						</Button>
@@ -137,8 +138,12 @@ export default function LoginPage() {
 						</div>
 					</div>
 
-					<Button variant="outline" className="w-full">
-						<svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">
+					<Button
+						variant="outline"
+						className="w-full">
+						<svg
+							className="mr-2 h-4 w-4"
+							viewBox="0 0 24 24">
 							<path
 								d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
 								fill="#4285F4"
@@ -158,14 +163,15 @@ export default function LoginPage() {
 						</svg>
 						Masuk dengan Google
 					</Button>
+					<p className="mt-6 text-center text-sm text-gray-600">
+						Belum punya akun?{" "}
+						<Link
+							href="/register"
+							className="text-primary hover:underline font-medium">
+							Daftar sekarang
+						</Link>
+					</p>
 				</div>
-
-				<p className="mt-6 text-center text-sm text-gray-600">
-					Belum punya akun?{" "}
-					<Link href="/register" className="text-primary hover:underline font-medium">
-						Daftar sekarang
-					</Link>
-				</p>
 			</div>
 		</div>
 	);

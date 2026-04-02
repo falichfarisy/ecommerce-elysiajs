@@ -1,7 +1,7 @@
-import { sqliteTable, text, integer, real, index } from "drizzle-orm/sqlite-core";
+import { pgTable, text, integer, real, index, timestamp } from "drizzle-orm/pg-core";
 import { relations, sql } from "drizzle-orm";
 
-export const user = sqliteTable("user", {
+export const user = pgTable("user", {
 	id: text("id").primaryKey(),
 	name: text("name").notNull(),
 	email: text("email").notNull().unique(),
@@ -9,25 +9,25 @@ export const user = sqliteTable("user", {
 		.default(false)
 		.notNull(),
 	image: text("image"),
-	createdAt: integer("created_at", { mode: "timestamp_ms" })
-		.default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
+	createdAt: timestamp("created_at", { mode: "date" })
+		.default(sql`now()`)
 		.notNull(),
-	updatedAt: integer("updated_at", { mode: "timestamp_ms" })
-		.$onUpdate(() => new Date())
+	updatedAt: timestamp("updated_at", { mode: "date" })
+		.default(sql`now()`)
 		.notNull(),
 });
 
-export const session = sqliteTable(
+export const session = pgTable(
 	"session",
 	{
 		id: text("id").primaryKey(),
-		expiresAt: integer("expires_at", { mode: "timestamp_ms" }).notNull(),
+		expiresAt: timestamp("expires_at", { mode: "date" }).notNull(),
 		token: text("token").notNull().unique(),
-		createdAt: integer("created_at", { mode: "timestamp_ms" })
-			.default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
+		createdAt: timestamp("created_at", { mode: "date" })
+			.default(sql`now()`)
 			.notNull(),
-		updatedAt: integer("updated_at", { mode: "timestamp_ms" })
-			.$onUpdate(() => new Date())
+		updatedAt: timestamp("updated_at", { mode: "date" })
+			.default(sql`now()`)
 			.notNull(),
 		ipAddress: text("ip_address"),
 		userAgent: text("user_agent"),
@@ -38,7 +38,7 @@ export const session = sqliteTable(
 	(table) => [index("session_userId_idx").on(table.userId)],
 );
 
-export const account = sqliteTable(
+export const account = pgTable(
 	"account",
 	{
 		id: text("id").primaryKey(),
@@ -50,43 +50,38 @@ export const account = sqliteTable(
 		accessToken: text("access_token"),
 		refreshToken: text("refresh_token"),
 		idToken: text("id_token"),
-		accessTokenExpiresAt: integer("access_token_expires_at", {
-			mode: "timestamp_ms",
-		}),
-		refreshTokenExpiresAt: integer("refresh_token_expires_at", {
-			mode: "timestamp_ms",
-		}),
+		accessTokenExpiresAt: timestamp("access_token_expires_at", { mode: "date" }),
+		refreshTokenExpiresAt: timestamp("refresh_token_expires_at", { mode: "date" }),
 		scope: text("scope"),
 		password: text("password"),
-		createdAt: integer("created_at", { mode: "timestamp_ms" })
-			.default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
+		createdAt: timestamp("created_at", { mode: "date" })
+			.default(sql`now()`)
 			.notNull(),
-		updatedAt: integer("updated_at", { mode: "timestamp_ms" })
-			.$onUpdate(() => new Date())
+		updatedAt: timestamp("updated_at", { mode: "date" })
+			.default(sql`now()`)
 			.notNull(),
 	},
 	(table) => [index("account_userId_idx").on(table.userId)],
 );
 
-export const verification = sqliteTable(
+export const verification = pgTable(
 	"verification",
 	{
 		id: text("id").primaryKey(),
 		identifier: text("identifier").notNull(),
 		value: text("value").notNull(),
-		expiresAt: integer("expires_at", { mode: "timestamp_ms" }).notNull(),
-		createdAt: integer("created_at", { mode: "timestamp_ms" })
-			.default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
+		expiresAt: timestamp("expires_at", { mode: "date" }).notNull(),
+		createdAt: timestamp("created_at", { mode: "date" })
+			.default(sql`now()`)
 			.notNull(),
-		updatedAt: integer("updated_at", { mode: "timestamp_ms" })
-			.default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
-			.$onUpdate(() => new Date())
+		updatedAt: timestamp("updated_at", { mode: "date" })
+			.default(sql`now()`)
 			.notNull(),
 	},
 	(table) => [index("verification_identifier_idx").on(table.identifier)],
 );
 
-export const userProfile = sqliteTable("user_profile", {
+export const userProfile = pgTable("user_profile", {
 	userId: text("user_id")
 		.primaryKey()
 		.references(() => user.id, { onDelete: "cascade" }),
@@ -97,7 +92,7 @@ export const userProfile = sqliteTable("user_profile", {
 		.default("customer"),
 });
 
-export const products = sqliteTable("products", {
+export const products = pgTable("products", {
 	id: integer("id").primaryKey({ autoIncrement: true }),
 	name: text("name").notNull(),
 	description: text("description"),
@@ -105,15 +100,15 @@ export const products = sqliteTable("products", {
 	stock: integer("stock").notNull().default(0),
 	imageUrl: text("image_url"),
 	category: text("category"),
-	createdAt: integer("created_at", { mode: "timestamp" })
-		.notNull()
-		.$defaultFn(() => new Date()),
-	updatedAt: integer("updated_at", { mode: "timestamp" })
-		.notNull()
-		.$defaultFn(() => new Date()),
+	createdAt: timestamp("created_at", { mode: "date" })
+		.default(sql`now()`)
+		.notNull(),
+	updatedAt: timestamp("updated_at", { mode: "date" })
+		.default(sql`now()`)
+		.notNull(),
 });
 
-export const carts = sqliteTable("carts", {
+export const carts = pgTable("carts", {
 	id: integer("id").primaryKey({ autoIncrement: true }),
 	userId: text("user_id")
 		.notNull()
@@ -122,12 +117,12 @@ export const carts = sqliteTable("carts", {
 		.notNull()
 		.references(() => products.id, { onDelete: "cascade" }),
 	quantity: integer("quantity").notNull().default(1),
-	createdAt: integer("created_at", { mode: "timestamp" })
-		.notNull()
-		.$defaultFn(() => new Date()),
+	createdAt: timestamp("created_at", { mode: "date" })
+		.default(sql`now()`)
+		.notNull(),
 });
 
-export const orders = sqliteTable("orders", {
+export const orders = pgTable("orders", {
 	id: integer("id").primaryKey({ autoIncrement: true }),
 	userId: text("user_id")
 		.notNull()
@@ -139,15 +134,15 @@ export const orders = sqliteTable("orders", {
 	shippingAddress: text("shipping_address").notNull(),
 	phone: text("phone").notNull(),
 	notes: text("notes"),
-	createdAt: integer("created_at", { mode: "timestamp" })
-		.notNull()
-		.$defaultFn(() => new Date()),
-	updatedAt: integer("updated_at", { mode: "timestamp" })
-		.notNull()
-		.$defaultFn(() => new Date()),
+	createdAt: timestamp("created_at", { mode: "date" })
+		.default(sql`now()`)
+		.notNull(),
+	updatedAt: timestamp("updated_at", { mode: "date" })
+		.default(sql`now()`)
+		.notNull(),
 });
 
-export const orderItems = sqliteTable("order_items", {
+export const orderItems = pgTable("order_items", {
 	id: integer("id").primaryKey({ autoIncrement: true }),
 	orderId: integer("order_id")
 		.notNull()
@@ -157,9 +152,9 @@ export const orderItems = sqliteTable("order_items", {
 		.references(() => products.id),
 	quantity: integer("quantity").notNull(),
 	price: real("price").notNull(),
-	createdAt: integer("created_at", { mode: "timestamp" })
-		.notNull()
-		.$defaultFn(() => new Date()),
+	createdAt: timestamp("created_at", { mode: "date" })
+		.default(sql`now()`)
+		.notNull(),
 });
 
 export const userRelations = relations(user, ({ one }) => ({
