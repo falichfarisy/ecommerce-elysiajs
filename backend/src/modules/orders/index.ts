@@ -42,24 +42,24 @@ export const ordersModule = new Elysia({ prefix: "/orders" })
 
 			const total = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
-			const order = await db
-				.insert(orders)
-				.values({
-					userId: user.id,
-					total,
-					shippingAddress,
-					phone,
-					notes: notes,
-				})
-				.returning();
+		const order = await db
+			.insert(orders)
+			.values({
+				userId: user.id,
+				total,
+				shippingAddress,
+				phone,
+				notes: notes,
+			} as any)
+			.returning();
 
-			for (const item of cartItems) {
-				await db.insert(orderItems).values({
-					orderId: order[0].id,
-					productId: item.productId,
-					quantity: item.quantity,
-					price: item.price,
-				});
+		for (const item of cartItems) {
+			await db.insert(orderItems).values({
+				orderId: order[0].id,
+				productId: item.productId,
+				quantity: item.quantity,
+				price: item.price,
+			} as any);
 				await db.delete(carts).where(eq(carts.id, item.cartId));
 			}
 

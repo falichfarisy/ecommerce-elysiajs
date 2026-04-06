@@ -1,6 +1,6 @@
 import { Elysia, t } from "elysia";
 import { db, reviews } from "../../db";
-import { eq, desc } from "drizzle-orm";
+import { eq, desc, sql } from "drizzle-orm";
 import { authMiddleware } from "../auth";
 
 export const reviewModule = new Elysia({ prefix: "/reviews" })
@@ -20,12 +20,12 @@ export const reviewModule = new Elysia({ prefix: "/reviews" })
 		}
 
 		const avgResult = await db
-			.select({ avg: reviews.rating })
+			.select({ avg: sql<number>`avg(${reviews.rating})` })
 			.from(reviews)
 			.where(eq(reviews.productId, productId));
 
-		const avgRating = avgResult.length
-			? (avgResult.reduce((sum, r) => sum + r.rating, 0) / avgResult.length).toFixed(1)
+		const avgRating = avgResult[0]?.avg 
+			? Number(avgResult[0].avg).toFixed(1)
 			: "0";
 
 		return {
@@ -58,15 +58,15 @@ export const reviewModule = new Elysia({ prefix: "/reviews" })
 				return { success: false, message: "Rating must be between 1 and 5" };
 			}
 
-			const result = await db
-				.insert(reviews)
-				.values({
-					productId,
-					userId: user.id,
-					rating,
-					comment,
-				})
-				.returning();
+		const result = await db
+			.insert(reviews)
+			.values({
+				productId,
+				userId: user.id,
+				rating,
+				comment,
+			} as any)
+			.returning();
 
 			return { success: true, data: result[0] };
 		},

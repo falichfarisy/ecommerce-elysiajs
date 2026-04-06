@@ -1,6 +1,6 @@
 import { Elysia, t } from "elysia";
 import { db, products } from "../../db";
-import { eq, and, lte, gte } from "drizzle-orm";
+import { eq, and, lte, gte, sql } from "drizzle-orm";
 import { authMiddleware } from "../auth";
 
 const LOW_STOCK_THRESHOLD = 10;
@@ -13,7 +13,7 @@ export async function deductStock(productId: number, quantity: number): Promise<
 
 	await db
 		.update(products)
-		.set({ stock: product[0].stock - quantity })
+		.set({ stock: sql`${products.stock} - ${quantity}` })
 		.where(eq(products.id, productId));
 	return true;
 }
@@ -21,7 +21,7 @@ export async function deductStock(productId: number, quantity: number): Promise<
 export async function restoreStock(productId: number, quantity: number) {
 	await db
 		.update(products)
-		.set({ stock: products.stock + quantity })
+		.set({ stock: sql`${products.stock} + ${quantity}` })
 		.where(eq(products.id, productId));
 }
 

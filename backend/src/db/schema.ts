@@ -1,11 +1,11 @@
-import { pgTable, text, integer, real, index, timestamp } from "drizzle-orm/pg-core";
+import { pgTable, text, integer, real, index, timestamp, boolean } from "drizzle-orm/pg-core";
 import { relations, sql } from "drizzle-orm";
 
 export const user = pgTable("user", {
 	id: text("id").primaryKey(),
 	name: text("name").notNull(),
 	email: text("email").notNull().unique(),
-	emailVerified: integer("email_verified", { mode: "boolean" })
+	emailVerified: boolean("email_verified")
 		.default(false)
 		.notNull(),
 	image: text("image"),
@@ -87,13 +87,13 @@ export const userProfile = pgTable("user_profile", {
 		.references(() => user.id, { onDelete: "cascade" }),
 	username: text("username").notNull(),
 	phone: text("phone"),
-	role: text("role", { enum: ["customer", "admin"] })
+	role: text("role", { enum: ["customer", "admin", "staff"] })
 		.notNull()
 		.default("customer"),
 });
 
 export const products = pgTable("products", {
-	id: integer("id").primaryKey({ autoIncrement: true }),
+	id: integer("id").primaryKey(),
 	name: text("name").notNull(),
 	description: text("description"),
 	price: real("price").notNull(),
@@ -109,7 +109,7 @@ export const products = pgTable("products", {
 });
 
 export const carts = pgTable("carts", {
-	id: integer("id").primaryKey({ autoIncrement: true }),
+	id: integer("id").primaryKey(),
 	userId: text("user_id")
 		.notNull()
 		.references(() => user.id, { onDelete: "cascade" }),
@@ -123,7 +123,7 @@ export const carts = pgTable("carts", {
 });
 
 export const orders = pgTable("orders", {
-	id: integer("id").primaryKey({ autoIncrement: true }),
+	id: integer("id").primaryKey(),
 	userId: text("user_id")
 		.notNull()
 		.references(() => user.id, { onDelete: "cascade" }),
@@ -143,7 +143,7 @@ export const orders = pgTable("orders", {
 });
 
 export const orderItems = pgTable("order_items", {
-	id: integer("id").primaryKey({ autoIncrement: true }),
+	id: integer("id").primaryKey(),
 	orderId: integer("order_id")
 		.notNull()
 		.references(() => orders.id, { onDelete: "cascade" }),
@@ -158,7 +158,7 @@ export const orderItems = pgTable("order_items", {
 });
 
 export const reviews = pgTable("reviews", {
-	id: integer("id").primaryKey({ autoIncrement: true }),
+	id: integer("id").primaryKey(),
 	productId: integer("product_id")
 		.notNull()
 		.references(() => products.id, { onDelete: "cascade" }),
@@ -173,7 +173,7 @@ export const reviews = pgTable("reviews", {
 });
 
 export const wishlists = pgTable("wishlists", {
-	id: integer("id").primaryKey({ autoIncrement: true }),
+	id: integer("id").primaryKey(),
 	userId: text("user_id")
 		.notNull()
 		.references(() => user.id, { onDelete: "cascade" }),

@@ -52,7 +52,7 @@ export const wishlistModule = new Elysia({ prefix: "/wishlist" })
 			await db.insert(wishlists).values({
 				userId: user.id,
 				productId,
-			});
+			} as any);
 
 			return { success: true, message: "Added to wishlist" };
 		},

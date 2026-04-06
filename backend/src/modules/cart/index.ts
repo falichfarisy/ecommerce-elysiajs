@@ -1,6 +1,6 @@
 import { Elysia, t } from "elysia";
 import { authMiddleware } from "../auth";
-import { db, carts, products } from "../../db";
+import { db, carts, products, type NewCart } from "../../db";
 import { eq, and } from "drizzle-orm";
 
 export const cartModule = new Elysia({ prefix: "/cart" })
@@ -55,7 +55,7 @@ export const cartModule = new Elysia({ prefix: "/cart" })
 					userId: user.id,
 					productId,
 					quantity,
-				});
+				} as any);
 			}
 
 			return { success: true, message: "Item added to cart" };

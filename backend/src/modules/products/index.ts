@@ -41,7 +41,20 @@ export const productsModule = new Elysia({ prefix: "/product" })
 			const whereClause = conditions.length > 0 ? and(...conditions) : undefined;
 
 			const offset = (page - 1) * limit;
-			const sortColumn = products[sortBy as keyof typeof products] || products.createdAt;
+			
+			let sortColumn: any;
+			switch (sortBy) {
+				case "price":
+					sortColumn = products.price;
+					break;
+				case "name":
+					sortColumn = products.name;
+					break;
+				case "createdAt":
+				default:
+					sortColumn = products.createdAt;
+					break;
+			}
 			const orderFn = sortOrder === "asc" ? asc : desc;
 
 			const [allProducts, totalCount] = await Promise.all([
@@ -89,7 +102,7 @@ export const productsModule = new Elysia({ prefix: "/product" })
 			const categories = await db
 				.selectDistinct({ category: products.category })
 				.from(products)
-				.where(products.category != null);
+				.where(sql`${products.category} IS NOT NULL`);
 
 			return {
 				success: true,
