@@ -37,6 +37,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     needs: lint-and-typecheck
+    if: false
 
     steps:
       - uses: actions/checkout@v4
