@@ -127,7 +127,7 @@ export default function HomePage() {
 				<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 					<div className="flex items-center justify-between h-16 lg:h-20 gap-4">
 						<div className="flex items-center gap-3">
-							<Button variant="ghost" size="icon" className="md:hidden hover:bg-gray-100">
+							<Button variant="ghost" size="icon-sm" className="md:hidden hover:bg-gray-100">
 								<Menu className="h-5 w-5 text-gray-700" />
 							</Button>
 							<span className="text-2xl lg:text-3xl font-bold tracking-tight text-gray-900">
@@ -142,17 +142,17 @@ export default function HomePage() {
 									placeholder="Search for products, brands and more..."
 									className="rounded-r-none border-gray-200 bg-gray-50 focus:bg-white transition-all focus:border-indigo-300 focus:ring-2 focus:ring-indigo-100"
 								/>
-								<Button className="rounded-l-none bg-indigo-600 hover:bg-indigo-700 px-8 transition-colors">
+								<Button size="sm" className="rounded-l-none bg-indigo-600 hover:bg-indigo-700 px-6 transition-colors">
 									<Search className="h-4 w-4" />
 								</Button>
 							</div>
 						</div>
 
 						<div className="flex items-center gap-1 sm:gap-2">
-							<Button variant="ghost" size="icon" className="hidden md:flex hover:bg-gray-100 text-gray-600">
+							<Button variant="ghost" size="icon-sm" className="hidden md:flex hover:bg-gray-100 text-gray-600">
 								<Heart className="h-5 w-5" />
 							</Button>
-							<Button variant="outline" size="icon" className="relative hover:border-indigo-300 hover:text-indigo-600 transition-colors">
+							<Button variant="outline" size="icon-sm" className="relative hover:border-indigo-300 hover:text-indigo-600 transition-colors">
 								<ShoppingCart className="h-5 w-5" />
 								<span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-indigo-600 text-white text-[10px] font-semibold flex items-center justify-center">
 									3
@@ -160,16 +160,16 @@ export default function HomePage() {
 							</Button>
 							<div className="flex items-center gap-2 ml-1">
 								{isLoggedIn ? (
-									<Button variant="outline" className="hidden sm:flex items-center gap-2 hover:border-indigo-300 hover:text-indigo-600">
+									<Button variant="outline" size="sm" className="hidden sm:flex items-center gap-2 hover:border-indigo-300 hover:text-indigo-600">
 										<User className="h-4 w-4" />
 										Account
 									</Button>
 								) : (
 									<>
-										<Button onClick={() => setIsLogin(true)} variant="outline" className="hidden sm:flex hover:border-indigo-300 hover:text-indigo-600">
+										<Button onClick={() => setIsLogin(true)} variant="outline" size="sm" className="hidden sm:flex hover:border-indigo-300 hover:text-indigo-600">
 											Sign In
 										</Button>
-										<Button asChild className="bg-indigo-600 hover:bg-indigo-700 shadow-lg shadow-indigo-200">
+										<Button asChild size="sm" className="bg-indigo-600 hover:bg-indigo-700 shadow-lg shadow-indigo-200">
 											<Link href="/register">Join</Link>
 										</Button>
 									</>
@@ -185,7 +185,7 @@ export default function HomePage() {
 								placeholder="Search..."
 								className="rounded-r-none border-gray-200 bg-gray-50"
 							/>
-							<Button className="rounded-l-none bg-indigo-600 hover:bg-indigo-700 px-4">
+							<Button size="sm" className="rounded-l-none bg-indigo-600 hover:bg-indigo-700 px-4">
 								<Search className="h-4 w-4" />
 							</Button>
 						</div>
