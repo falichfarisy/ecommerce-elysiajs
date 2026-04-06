@@ -8,7 +8,6 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     environment: production
-
     steps:
       - uses: actions/checkout@v4
       - name: Install Bun
@@ -17,11 +16,21 @@ jobs:
       - name: Setup Bun path
         run: echo "$HOME/.bun/bin" >> $GITHUB_PATH
 
-      - name: Install dependencies
+      - name: Install backend dependencies
+        working-directory: ./backend
         run: bun install
 
-      - name: Build
+      - name: Build backend
+        working-directory: ./backend
         run: bun build src/index.ts --outdir ./dist --target=bun
+
+      - name: Install frontend dependencies
+        working-directory: ./frontend
+        run: bun install
+
+      - name: Build frontend
+        working-directory: ./frontend
+        run: bun run build
 
       - name: Deploy to production
         run: echo "Deploy ke production server"

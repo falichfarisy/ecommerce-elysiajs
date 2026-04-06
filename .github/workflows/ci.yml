@@ -18,15 +18,23 @@ jobs:
       - name: Setup Bun path
         run: echo "$HOME/.bun/bin" >> $GITHUB_PATH
 
-      - name: Install dependencies
+      - name: Install backend dependencies
+        working-directory: ./backend
         run: bun install
 
-      - name: Typecheck
-
-      - name: Typecheck
+      - name: Typecheck backend
+        working-directory: ./backend
         run: bun run tsc --noEmit
 
-  build:
+      - name: Install frontend dependencies
+        working-directory: ./frontend
+        run: bun install
+
+      - name: Typecheck frontend
+        working-directory: ./frontend
+        run: bun run lint
+
+  test:
     runs-on: ubuntu-latest
     needs: lint-and-typecheck
 
@@ -38,8 +46,49 @@ jobs:
       - name: Setup Bun path
         run: echo "$HOME/.bun/bin" >> $GITHUB_PATH
 
-      - name: Install dependencies
+      - name: Install backend dependencies
+        working-directory: ./backend
         run: bun install
 
-      - name: Build
+      - name: Run tests
+        working-directory: ./backend
+        run: bun run test
+
+  build:
+    runs-on: ubuntu-latest
+    needs: test
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Bun
+        run: curl -fsSL https://bun.sh/install | bash
+
+      - name: Setup Bun path
+        run: echo "$HOME/.bun/bin" >> $GITHUB_PATH
+
+      - name: Install backend dependencies
+        working-directory: ./backend
+        run: bun install
+
+      - name: Build backend
+        working-directory: ./backend
         run: bun build src/index.ts --outdir ./dist --target=bun
+
+      - name: Install frontend dependencies
+        working-directory: ./frontend
+        run: bun install
+
+      - name: Build frontend
+        working-directory: ./frontend
+        run: bun run build
+
+  gatekeeper:
+    runs-on: ubuntu-latest
+    needs: [lint-and-typecheck, test, build]
+    if: failure()
+    steps:
+      - name: Pipeline failed
+        run: |
+          echo "❌ CI/CD Pipeline Failed!"
+          echo "One or more jobs have failed. Please fix the issues before merging."
+          exit 1
