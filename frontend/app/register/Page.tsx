@@ -56,8 +56,9 @@ export default function RegisterPage() {
 			} else {
 				setErrorMessage(result.message || "Registrasi gagal");
 			}
-		} catch (error: any) {
-			setErrorMessage(error?.response?.data?.message || "Terjadi kesalahan");
+		} catch (error: unknown) {
+			const err = error as { response?: { data?: { message?: string } } };
+			setErrorMessage(err.response?.data?.message || "Terjadi kesalahan");
 		} finally {
 			setIsLoading(false);
 		}
