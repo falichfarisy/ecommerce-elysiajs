@@ -344,17 +344,17 @@ export default function HomePage() {
 						<CarouselContent>
 							<CarouselItem>
 								<div className="relative h-100 md:h-125 overflow-hidden rounded-3xl">
-									<div className="absolute inset-0 bg-linear-to-r from-slate-900/90 to-slate-900/40" />
+									<div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-transparent z-10" />
 									<Image src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1600&h=900&fit=crop" alt="Hero" fill sizes="100vw" className="object-cover" />
-									<div className="absolute inset-0 flex items-center">
+									<div className="absolute inset-0 flex items-center z-20">
 										<div className="max-w-2xl px-8 md:px-16">
 											<span className="mb-6 inline-block rounded-full bg-indigo-600/90 px-4 py-1.5 text-sm font-medium text-white backdrop-blur-sm">
 												Limited Time Offer
 											</span>
-											<h2 className="mb-4 text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold leading-tight text-white">
-												Discover <span className="text-indigo-400">Premium</span> Products
+											<h2 className="mb-4 text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold leading-tight text-white drop-shadow-lg">
+												Discover <span className="text-indigo-300">Premium</span> Products
 											</h2>
-											<p className="mb-8 max-w-lg text-lg text-gray-300">
+											<p className="mb-8 max-w-lg text-lg text-gray-200 drop-shadow-md">
 												Explore our curated collection of high-quality products at unbeatable prices. Free shipping on orders over Rp 100.000.
 											</p>
 											<div className="flex flex-wrap gap-4">
@@ -372,17 +372,17 @@ export default function HomePage() {
 							</CarouselItem>
 							<CarouselItem>
 								<div className="relative h-100 md:h-125 overflow-hidden rounded-3xl">
-									<div className="absolute inset-0 bg-linear-to-r from-purple-900/90 to-purple-900/40" />
+									<div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-transparent z-10" />
 									<Image src="https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=1600&h=900&fit=crop" alt="Fashion" fill sizes="100vw" className="object-cover" />
-									<div className="absolute inset-0 flex items-center">
+									<div className="absolute inset-0 flex items-center z-20">
 										<div className="max-w-2xl px-8 md:px-16">
 											<span className="mb-6 inline-block rounded-full bg-purple-600/90 px-4 py-1.5 text-sm font-medium text-white backdrop-blur-sm">
 												New Collection
 											</span>
-											<h2 className="mb-4 text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold leading-tight text-white">
-												Summer <span className="text-purple-400">Essentials</span>
+											<h2 className="mb-4 text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold leading-tight text-white drop-shadow-lg">
+												Summer <span className="text-purple-300">Essentials</span>
 											</h2>
-											<p className="mb-8 max-w-lg text-lg text-gray-300">
+											<p className="mb-8 max-w-lg text-lg text-gray-200 drop-shadow-md">
 												Refresh your wardrobe with our latest summer collection. Trendy styles that combine comfort and elegance.
 											</p>
 											<Button size="lg" className="bg-white text-purple-900 shadow-xl hover:bg-gray-100">
@@ -395,17 +395,17 @@ export default function HomePage() {
 							</CarouselItem>
 							<CarouselItem>
 								<div className="relative h-100 md:h-125 overflow-hidden rounded-3xl">
-									<div className="absolute inset-0 bg-linear-to-r from-emerald-900/90 to-emerald-900/40" />
+									<div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-transparent z-10" />
 									<Image src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=1600&h=900&fit=crop" alt="Home" fill sizes="100vw" className="object-cover" />
-									<div className="absolute inset-0 flex items-center">
+									<div className="absolute inset-0 flex items-center z-20">
 										<div className="max-w-2xl px-8 md:px-16">
 											<span className="mb-6 inline-block rounded-full bg-emerald-600/90 px-4 py-1.5 text-sm font-medium text-white backdrop-blur-sm">
 												Free Shipping
 											</span>
-											<h2 className="mb-4 text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold leading-tight text-white">
-												Home <span className="text-emerald-400">Essentials</span>
+											<h2 className="mb-4 text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold leading-tight text-white drop-shadow-lg">
+												Home <span className="text-emerald-300">Essentials</span>
 											</h2>
-											<p className="mb-8 max-w-lg text-lg text-gray-300">
+											<p className="mb-8 max-w-lg text-lg text-gray-200 drop-shadow-md">
 												Transform your living space with our premium home essentials. Quality products for your dream home.
 											</p>
 											<Button size="lg" className="bg-white text-emerald-900 shadow-xl hover:bg-gray-100">
