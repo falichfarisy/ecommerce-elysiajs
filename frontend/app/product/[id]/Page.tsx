@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import {
@@ -17,7 +17,8 @@ import {
 	BadgeCheck,
 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
-import { Card, CardContent, CardFooter } from "@/components/ui/Card";
+import { Card, CardContent } from "@/components/ui/Card";
+import { getData } from "@/app/ApiConfig";
 
 const products = [
 	{ id: 1, name: "Wireless Headphone Pro", price: 299000, originalPrice: 499000, rating: 4.5, reviews: 234, image: "🎧", category: "Elektronik", brand: "SoundMax", stock: 15 },
@@ -54,6 +55,22 @@ export default function ProductDetailPage() {
 	const [quantity, setQuantity] = useState(1);
 	const [selectedImage, setSelectedImage] = useState(0);
 	const [activeTab, setActiveTab] = useState<"description" | "specs" | "reviews">("description");
+	const [isLoggedIn, setIsLoggedIn] = useState(false);
+	const [isLoading, setIsLoading] = useState(true);
+
+	useEffect(() => {
+		const checkAuth = async () => {
+			try {
+				const result = await getData("/api/auth/get-session");
+				setIsLoggedIn(!!result);
+			} catch {
+				setIsLoggedIn(false);
+			} finally {
+				setIsLoading(false);
+			}
+		};
+		checkAuth();
+	}, []);
 
 	const discount = Math.round((1 - product.price / product.originalPrice) * 100);
 
@@ -74,15 +91,19 @@ export default function ProductDetailPage() {
 							<span className="text-xl font-bold text-primary">TokoKu</span>
 						</Link>
 						<div className="flex items-center gap-3">
-							<Button variant="outline" size="icon">
-								<Heart className="h-5 w-5" />
-							</Button>
-							<Button variant="outline" size="icon" className="relative">
-								<ShoppingCart className="h-5 w-5" />
-								<span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-red-500 text-white text-xs flex items-center justify-center">
-									3
-								</span>
-							</Button>
+							{!isLoading && isLoggedIn && (
+								<>
+									<Button variant="outline" size="icon">
+										<Heart className="h-5 w-5" />
+									</Button>
+									<Button variant="outline" size="icon" className="relative">
+										<ShoppingCart className="h-5 w-5" />
+										<span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-red-500 text-white text-xs flex items-center justify-center">
+											3
+										</span>
+									</Button>
+								</>
+							)}
 						</div>
 					</div>
 				</div>
@@ -197,9 +218,11 @@ export default function ProductDetailPage() {
 								<ShoppingCart className="h-5 w-5 mr-2" />
 								Masukkan Keranjang
 							</Button>
-							<Button size="lg" variant="outline">
-								<Heart className="h-5 w-5" />
-							</Button>
+							{isLoggedIn && (
+								<Button size="lg" variant="outline">
+									<Heart className="h-5 w-5" />
+								</Button>
+							)}
 							<Button size="lg" variant="outline">
 								<Share2 className="h-5 w-5" />
 							</Button>

@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { ShoppingCart, Search, Menu, Heart, Star, ChevronRight, User, Package, CreditCard, Headphones } from "lucide-react";
-import * as React from "react";
+import Image from "next/image";
+import { ShoppingCart, Search, Menu, Heart, Star, ChevronRight, User, Package, CreditCard, Headphones, HelpCircle, MapPin, LogOut, X, PackageCheck, Tag, Percent, Shield, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Card, CardContent, CardFooter } from "@/components/ui/Card";
@@ -82,6 +82,7 @@ export default function HomePage() {
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
 	const [isLoading, setIsLoading] = useState(true);
 	const [scrolled, setScrolled] = useState(false);
+	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
 	useEffect(() => {
 		const checkAuth = async () => {
@@ -105,32 +106,168 @@ export default function HomePage() {
 		return () => window.removeEventListener("scroll", handleScroll);
 	}, []);
 
-	const handleLoginSuccess = () => {
-		setIsLogin(false);
-		setIsLoggedIn(true);
-	};
+	useEffect(() => {
+		if (isMobileMenuOpen) {
+			document.body.style.overflow = "hidden";
+		} else {
+			document.body.style.overflow = "";
+		}
+		return () => {
+			document.body.style.overflow = "";
+		};
+	}, [isMobileMenuOpen]);
 
 	if (isLoading) return null;
 
 	return (
-		<div className="min-h-screen flex flex-col bg-[#FAFAFA]">
+		<div className="bg-[#FAFAFA] flex min-h-screen flex-col">
 			{isLogin && (
 				<div className="fixed inset-0 z-[100] flex items-center justify-center">
-					<div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setIsLogin(false)} />
+					<div className="bg-black/60 backdrop-blur-sm absolute inset-0" onClick={() => setIsLogin(false)} />
 					<div className="relative z-10">
 						<LoginPage onClose={() => setIsLogin(false)} />
 					</div>
 				</div>
 			)}
 
-			<header className={`sticky top-0 z-50 transition-all duration-300 ${scrolled ? "bg-white/95 backdrop-blur-md shadow-[0_2px_20px_rgba(0,0,0,0.08)]" : "bg-white"}`}>
-				<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-					<div className="flex items-center justify-between h-16 lg:h-20 gap-4">
-						<div className="flex items-center gap-3">
-							<Button variant="ghost" size="icon-sm" className="md:hidden hover:bg-gray-100">
-								<Menu className="h-5 w-5 text-gray-700" />
+			{isMobileMenuOpen && (
+				<div className="fixed inset-0 z-[200] md:hidden">
+					<div className="bg-black/50 absolute inset-0" onClick={() => setIsMobileMenuOpen(false)} />
+					<div className="animate-in slide-in-from-left bg-white shadow-2xl absolute bottom-0 left-0 top-0 w-80 max-w-[85vw] duration-300">
+						<div className="border-b flex items-center justify-between p-4">
+							<span className="text-xl font-bold">
+								<span className="text-indigo-600">Shop</span>Co
+							</span>
+							<Button variant="ghost" size="icon-sm" onClick={() => setIsMobileMenuOpen(false)}>
+								<X className="size-5" />
 							</Button>
-							<span className="text-2xl lg:text-3xl font-bold tracking-tight text-gray-900">
+						</div>
+
+						{isLoggedIn ? (
+							<div className="bg-gray-50 border-b p-4">
+								<div className="flex items-center gap-3 mb-3">
+									<div className="bg-indigo-600 rounded-full size-12 flex items-center justify-center">
+										<User className="size-6 text-white" />
+									</div>
+									<div>
+										<p className="font-semibold text-gray-900">My Account</p>
+										<p className="text-sm text-gray-500">Welcome back!</p>
+									</div>
+								</div>
+								<Button variant="outline" size="sm" className="w-full">Manage Account</Button>
+							</div>
+						) : (
+							<div className="bg-indigo-50 border-b p-4">
+								<p className="text-gray-600 text-sm mb-3">Sign in to access your orders, wishlist, and exclusive deals.</p>
+								<div className="flex gap-2">
+									<Button size="sm" className="flex-1 bg-indigo-600" onClick={() => { setIsMobileMenuOpen(false); setIsLogin(true); }}>Sign In</Button>
+									<Button asChild size="sm" variant="outline" className="flex-1"><Link href="/register">Join</Link></Button>
+								</div>
+							</div>
+						)}
+
+						<nav className="max-h-[calc(100vh-200px)] overflow-y-auto p-4">
+							<p className="mb-3 text-xs font-semibold uppercase tracking-wider text-gray-400">Quick Access</p>
+							<ul className="space-y-1">
+								<li>
+									<Link href="/" className="flex items-center gap-3 rounded-lg px-3 py-3 transition-colors hover:bg-gray-100" onClick={() => setIsMobileMenuOpen(false)}>
+										<Package className="size-5 text-gray-500" />
+										<span className="font-medium text-gray-700">Home</span>
+									</Link>
+								</li>
+								<li>
+									<Link href="/" className="flex items-center gap-3 rounded-lg px-3 py-3 text-indigo-600 transition-colors hover:bg-indigo-50" onClick={() => setIsMobileMenuOpen(false)}>
+										<Percent className="size-5" />
+										<span className="font-medium">Flash Sale</span>
+										<span className="ml-auto rounded-full bg-red-500 px-2 py-0.5 text-xs text-white">Live</span>
+									</Link>
+								</li>
+								<li>
+									<Link href="/" className="flex items-center gap-3 rounded-lg px-3 py-3 transition-colors hover:bg-gray-100" onClick={() => setIsMobileMenuOpen(false)}>
+										<Heart className="size-5 text-gray-500" />
+										<span className="font-medium text-gray-700">Wishlist</span>
+									</Link>
+								</li>
+								<li>
+									<Link href="/" className="flex items-center gap-3 rounded-lg px-3 py-3 transition-colors hover:bg-gray-100" onClick={() => setIsMobileMenuOpen(false)}>
+										<ShoppingCart className="size-5 text-gray-500" />
+										<span className="font-medium text-gray-700">My Cart</span>
+									</Link>
+								</li>
+								<li>
+									<Link href="/" className="flex items-center gap-3 rounded-lg px-3 py-3 transition-colors hover:bg-gray-100" onClick={() => setIsMobileMenuOpen(false)}>
+										<PackageCheck className="size-5 text-gray-500" />
+										<span className="font-medium text-gray-700">My Orders</span>
+									</Link>
+								</li>
+							</ul>
+
+							<div className="mt-6">
+								<p className="mb-3 text-xs font-semibold uppercase tracking-wider text-gray-400">Categories</p>
+								<ul className="space-y-1">
+									{categories.slice(0, 5).map((cat) => (
+										<li key={cat.name}>
+											<Link href="/" className="flex items-center gap-3 rounded-lg px-3 py-3 transition-colors hover:bg-gray-100" onClick={() => setIsMobileMenuOpen(false)}>
+												<Tag className="size-5 text-gray-500" />
+												<span className="font-medium text-gray-700">{cat.name}</span>
+											</Link>
+										</li>
+									))}
+								</ul>
+							</div>
+
+							<div className="mt-6 border-t pt-6">
+								<p className="mb-3 text-xs font-semibold uppercase tracking-wider text-gray-400">Support</p>
+								<ul className="space-y-1">
+									<li>
+										<Link href="/" className="flex items-center gap-3 rounded-lg px-3 py-3 transition-colors hover:bg-gray-100" onClick={() => setIsMobileMenuOpen(false)}>
+											<MessageCircle className="size-5 text-gray-500" />
+											<span className="font-medium text-gray-700">Live Chat</span>
+										</Link>
+									</li>
+									<li>
+										<Link href="/" className="flex items-center gap-3 rounded-lg px-3 py-3 transition-colors hover:bg-gray-100" onClick={() => setIsMobileMenuOpen(false)}>
+											<HelpCircle className="size-5 text-gray-500" />
+											<span className="font-medium text-gray-700">Help Center</span>
+										</Link>
+									</li>
+									<li>
+										<Link href="/" className="flex items-center gap-3 rounded-lg px-3 py-3 transition-colors hover:bg-gray-100" onClick={() => setIsMobileMenuOpen(false)}>
+											<MapPin className="size-5 text-gray-500" />
+											<span className="font-medium text-gray-700">Track Order</span>
+										</Link>
+									</li>
+								</ul>
+							</div>
+
+							{isLoggedIn && (
+								<div className="mt-6 border-t pt-6">
+									<Button variant="ghost" className="w-full justify-start text-red-500 hover:bg-red-50 hover:text-red-600" onClick={() => { setIsMobileMenuOpen(false); setIsLoggedIn(false); }}>
+										<LogOut className="mr-3 size-5" />
+										<span className="font-medium">Sign Out</span>
+									</Button>
+								</div>
+							)}
+
+							<div className="mt-6 border-t pt-6">
+								<div className="flex items-center justify-center gap-4 text-gray-400">
+									<Shield className="size-4" />
+									<span className="text-xs">Secure Shopping</span>
+								</div>
+							</div>
+						</nav>
+					</div>
+				</div>
+			)}
+
+			<header className={`sticky top-0 z-50 transition-all duration-300 ${scrolled ? "bg-white/95 shadow-[0_2px_20px_rgba(0,0,0,0.08)] backdrop-blur-md" : "bg-white"}`}>
+				<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+					<div className="flex h-16 items-center justify-between gap-4 lg:h-20">
+						<div className="flex items-center gap-3">
+							<Button variant="ghost" size="icon-sm" className="md:hidden hover:bg-gray-100" onClick={() => setIsMobileMenuOpen(true)}>
+								<Menu className="size-5 text-gray-700" />
+							</Button>
+							<span className="text-2xl font-bold tracking-tight text-gray-900 lg:text-3xl">
 								<span className="text-indigo-600">Shop</span>Co
 							</span>
 						</div>
@@ -140,36 +277,40 @@ export default function HomePage() {
 								<Input
 									type="search"
 									placeholder="Search for products, brands and more..."
-									className="rounded-r-none border-gray-200 bg-gray-50 focus:bg-white transition-all focus:border-indigo-300 focus:ring-2 focus:ring-indigo-100"
+									className="rounded-r-none border-0 bg-gray-50 focus:bg-white transition-all focus:ring-0"
 								/>
-								<Button size="sm" className="rounded-l-none bg-indigo-600 hover:bg-indigo-700 px-6 transition-colors">
-									<Search className="h-4 w-4" />
+								<Button className="rounded-l-none bg-indigo-600 px-6 hover:bg-indigo-700 transition-colors" aria-label="Search">
+									<Search className="size-5" />
 								</Button>
 							</div>
 						</div>
 
 						<div className="flex items-center gap-1 sm:gap-2">
-							<Button variant="ghost" size="icon-sm" className="hidden md:flex hover:bg-gray-100 text-gray-600">
-								<Heart className="h-5 w-5" />
-							</Button>
-							<Button variant="outline" size="icon-sm" className="relative hover:border-indigo-300 hover:text-indigo-600 transition-colors">
-								<ShoppingCart className="h-5 w-5" />
-								<span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-indigo-600 text-white text-[10px] font-semibold flex items-center justify-center">
-									3
-								</span>
-							</Button>
-							<div className="flex items-center gap-2 ml-1">
+							{isLoggedIn && (
+								<>
+									<Button variant="ghost" size="icon-sm" className="hidden md:flex text-gray-600 hover:bg-gray-100">
+										<Heart className="size-5" />
+									</Button>
+									<Button variant="outline" size="icon-sm" className="relative hover:border-indigo-300 hover:text-indigo-600 transition-colors">
+										<ShoppingCart className="size-5" />
+										<span className="absolute -top-1 -right-1 flex size-4 items-center justify-center rounded-full bg-indigo-600 text-[10px] font-semibold text-white">
+											3
+										</span>
+									</Button>
+								</>
+							)}
+							<div className="ml-1 flex items-center gap-2">
 								{isLoggedIn ? (
 									<Button variant="outline" size="sm" className="hidden sm:flex items-center gap-2 hover:border-indigo-300 hover:text-indigo-600">
-										<User className="h-4 w-4" />
+										<User className="size-4" />
 										Account
 									</Button>
 								) : (
 									<>
-										<Button onClick={() => setIsLogin(true)} variant="outline" size="sm" className="hidden sm:flex hover:border-indigo-300 hover:text-indigo-600">
+										<Button onClick={() => setIsLogin(true)} variant="outline" className="hidden sm:flex hover:border-indigo-300 hover:text-indigo-600">
 											Sign In
 										</Button>
-										<Button asChild size="sm" className="bg-indigo-600 hover:bg-indigo-700 shadow-lg shadow-indigo-200">
+										<Button asChild className="bg-indigo-600 shadow-lg shadow-indigo-200 hover:bg-indigo-700">
 											<Link href="/register">Join</Link>
 										</Button>
 									</>
@@ -183,45 +324,45 @@ export default function HomePage() {
 							<Input
 								type="search"
 								placeholder="Search..."
-								className="rounded-r-none border-gray-200 bg-gray-50"
+								className="rounded-r-none border-0 bg-gray-50"
 							/>
-							<Button size="sm" className="rounded-l-none bg-indigo-600 hover:bg-indigo-700 px-4">
-								<Search className="h-4 w-4" />
+							<Button className="rounded-l-none bg-indigo-600 px-4 hover:bg-indigo-700" aria-label="Search">
+								<Search className="size-5" />
 							</Button>
 						</div>
 					</div>
 				</div>
 			</header>
 
-			<section className="w-full bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 py-12 lg:py-20 relative overflow-hidden">
+			<section className="relative w-full overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 py-12 lg:py-20">
 				<div className="absolute inset-0 opacity-30">
-					<div className="absolute top-0 -left-40 w-80 h-80 bg-indigo-500 rounded-full mix-blend-multiply filter blur-3xl animate-pulse" />
-					<div className="absolute bottom-0 -right-40 w-80 h-80 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl animate-pulse delay-1000" />
+					<div className="absolute -left-40 top-0 size-80 rounded-full bg-indigo-500 blur-3xl mix-blend-multiply animate-pulse" />
+					<div className="absolute -right-40 bottom-0 size-80 rounded-full bg-purple-500 blur-3xl mix-blend-multiply animate-pulse delay-1000" />
 				</div>
-				<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+				<div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 					<Carousel className="w-full" opts={{ loop: true }}>
 						<CarouselContent>
 							<CarouselItem>
-								<div className="relative h-[400px] md:h-[500px] rounded-3xl overflow-hidden">
+								<div className="relative h-[400px] md:h-[500px] overflow-hidden rounded-3xl">
 									<div className="absolute inset-0 bg-gradient-to-r from-slate-900/90 to-slate-900/40" />
-									<img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1600&h=900&fit=crop" alt="Hero" className="w-full h-full object-cover" />
+									<Image src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1600&h=900&fit=crop" alt="Hero" fill className="object-cover" />
 									<div className="absolute inset-0 flex items-center">
-										<div className="px-8 md:px-16 max-w-2xl">
-											<span className="inline-block px-4 py-1.5 bg-indigo-600/90 backdrop-blur-sm rounded-full text-white text-sm font-medium mb-6">
+										<div className="max-w-2xl px-8 md:px-16">
+											<span className="mb-6 inline-block rounded-full bg-indigo-600/90 px-4 py-1.5 text-sm font-medium text-white backdrop-blur-sm">
 												Limited Time Offer
 											</span>
-											<h2 className="text-4xl md:text-6xl font-bold text-white mb-4 leading-tight">
+											<h2 className="mb-4 text-4xl font-bold leading-tight text-white md:text-6xl">
 												Discover <span className="text-indigo-400">Premium</span> Products
 											</h2>
-											<p className="text-gray-300 text-lg mb-8 max-w-lg">
+											<p className="mb-8 max-w-lg text-lg text-gray-300">
 												Explore our curated collection of high-quality products at unbeatable prices. Free shipping on orders over Rp 100.000.
 											</p>
 											<div className="flex flex-wrap gap-4">
-												<Button size="lg" className="bg-white text-slate-900 hover:bg-gray-100 shadow-xl">
+												<Button size="lg" className="bg-white text-slate-900 shadow-xl hover:bg-gray-100">
 													Shop Now
-													<ChevronRight className="ml-2 h-4 w-4" />
+													<ChevronRight className="ml-2 size-4" />
 												</Button>
-												<Button size="lg" variant="outline" className="text-white border-white/30 hover:bg-white/10 backdrop-blur-sm">
+												<Button size="lg" variant="outline" className="border-white/30 text-white backdrop-blur-sm hover:bg-white/10">
 													View Collection
 												</Button>
 											</div>
@@ -230,138 +371,140 @@ export default function HomePage() {
 								</div>
 							</CarouselItem>
 							<CarouselItem>
-								<div className="relative h-[400px] md:h-[500px] rounded-3xl overflow-hidden">
+								<div className="relative h-[400px] md:h-[500px] overflow-hidden rounded-3xl">
 									<div className="absolute inset-0 bg-gradient-to-r from-purple-900/90 to-purple-900/40" />
-									<img src="https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=1600&h=900&fit=crop" alt="Fashion" className="w-full h-full object-cover" />
+									<Image src="https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=1600&h=900&fit=crop" alt="Fashion" fill className="object-cover" />
 									<div className="absolute inset-0 flex items-center">
-										<div className="px-8 md:px-16 max-w-2xl">
-											<span className="inline-block px-4 py-1.5 bg-purple-600/90 backdrop-blur-sm rounded-full text-white text-sm font-medium mb-6">
+										<div className="max-w-2xl px-8 md:px-16">
+											<span className="mb-6 inline-block rounded-full bg-purple-600/90 px-4 py-1.5 text-sm font-medium text-white backdrop-blur-sm">
 												New Collection
 											</span>
-											<h2 className="text-4xl md:text-6xl font-bold text-white mb-4 leading-tight">
+											<h2 className="mb-4 text-4xl font-bold leading-tight text-white md:text-6xl">
 												Summer <span className="text-purple-400">Essentials</span>
 											</h2>
-											<p className="text-gray-300 text-lg mb-8 max-w-lg">
+											<p className="mb-8 max-w-lg text-lg text-gray-300">
 												Refresh your wardrobe with our latest summer collection. Trendy styles that combine comfort and elegance.
 											</p>
-											<Button size="lg" className="bg-white text-purple-900 hover:bg-gray-100 shadow-xl">
+											<Button size="lg" className="bg-white text-purple-900 shadow-xl hover:bg-gray-100">
 												Explore Now
-												<ChevronRight className="ml-2 h-4 w-4" />
+												<ChevronRight className="ml-2 size-4" />
 											</Button>
 										</div>
 									</div>
 								</div>
 							</CarouselItem>
 							<CarouselItem>
-								<div className="relative h-[400px] md:h-[500px] rounded-3xl overflow-hidden">
+								<div className="relative h-[400px] md:h-[500px] overflow-hidden rounded-3xl">
 									<div className="absolute inset-0 bg-gradient-to-r from-emerald-900/90 to-emerald-900/40" />
-									<img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=1600&h=900&fit=crop" alt="Home" className="w-full h-full object-cover" />
+									<Image src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=1600&h=900&fit=crop" alt="Home" fill className="object-cover" />
 									<div className="absolute inset-0 flex items-center">
-										<div className="px-8 md:px-16 max-w-2xl">
-											<span className="inline-block px-4 py-1.5 bg-emerald-600/90 backdrop-blur-sm rounded-full text-white text-sm font-medium mb-6">
+										<div className="max-w-2xl px-8 md:px-16">
+											<span className="mb-6 inline-block rounded-full bg-emerald-600/90 px-4 py-1.5 text-sm font-medium text-white backdrop-blur-sm">
 												Free Shipping
 											</span>
-											<h2 className="text-4xl md:text-6xl font-bold text-white mb-4 leading-tight">
+											<h2 className="mb-4 text-4xl font-bold leading-tight text-white md:text-6xl">
 												Home <span className="text-emerald-400">Essentials</span>
 											</h2>
-											<p className="text-gray-300 text-lg mb-8 max-w-lg">
+											<p className="mb-8 max-w-lg text-lg text-gray-300">
 												Transform your living space with our premium home essentials. Quality products for your dream home.
 											</p>
-											<Button size="lg" className="bg-white text-emerald-900 hover:bg-gray-100 shadow-xl">
+											<Button size="lg" className="bg-white text-emerald-900 shadow-xl hover:bg-gray-100">
 												Browse Now
-												<ChevronRight className="ml-2 h-4 w-4" />
+												<ChevronRight className="ml-2 size-4" />
 											</Button>
 										</div>
 									</div>
 								</div>
 							</CarouselItem>
 						</CarouselContent>
-						<CarouselPrevious className="left-6 bg-white/20 backdrop-blur-md border-0 hover:bg-white/40 text-white h-12 w-12" />
-						<CarouselNext className="right-6 bg-white/20 backdrop-blur-md border-0 hover:bg-white/40 text-white h-12 w-12" />
+						<CarouselPrevious className="left-6 size-12 border-0 bg-white/20 text-white backdrop-blur-md hover:bg-white/40" />
+						<CarouselNext className="right-6 size-12 border-0 bg-white/20 text-white backdrop-blur-md hover:bg-white/40" />
 					</Carousel>
 				</div>
 			</section>
 
-			<section className="py-12 bg-white">
-				<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-					<div className="flex items-center justify-between mb-8">
+			<section className="bg-white py-12">
+				<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+					<div className="mb-8 flex items-center justify-between">
 						<h2 className="text-2xl font-bold text-gray-900">Shop by Category</h2>
-						<Button variant="link" className="text-indigo-600 hover:text-indigo-700 text-sm font-medium">
+						<Button variant="link" className="text-sm font-medium text-indigo-600 hover:text-indigo-700">
 							View All
-							<ChevronRight className="ml-1 h-4 w-4" />
+							<ChevronRight className="ml-1 size-4" />
 						</Button>
 					</div>
-					<div className="grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-4">
-						{categories.map((category, idx) => (
+					<div className="grid grid-cols-4 gap-4 md:grid-cols-6 lg:grid-cols-8">
+						{categories.map((category) => (
 							<button
 								key={category.name}
-								className="group flex flex-col items-center p-4 rounded-2xl hover:bg-gray-50 transition-all duration-300 hover:shadow-lg hover:shadow-indigo-100/50">
-								<div className="relative w-16 h-16 md:w-20 md:h-20 mb-3 rounded-2xl overflow-hidden shadow-md">
-									<img src={category.image} alt={category.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
-									<div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+								className="group flex flex-col items-center rounded-2xl p-4 transition-all duration-300 hover:bg-gray-50 hover:shadow-lg hover:shadow-indigo-100/50">
+								<div className="relative mb-3 size-16 overflow-hidden rounded-2xl shadow-md md:size-20">
+									<Image src={category.image} alt={category.name} fill className="object-cover transition-transform duration-500 group-hover:scale-110" />
+									<div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
 								</div>
-								<span className="text-sm font-semibold text-gray-700 group-hover:text-indigo-600 transition-colors">
+								<span className="text-sm font-semibold text-gray-700 transition-colors group-hover:text-indigo-600">
 									{category.name}
 								</span>
-								<span className="text-xs text-gray-400 mt-0.5">{category.count.toLocaleString()}+ items</span>
+								<span className="mt-0.5 text-xs text-gray-400">{category.count.toLocaleString()}+ items</span>
 							</button>
 						))}
 					</div>
 				</div>
 			</section>
 
-			<section className="py-16 bg-gradient-to-br from-indigo-50 via-white to-purple-50">
-				<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-					<div className="flex items-center justify-between mb-8">
+			<section className="bg-gradient-to-br from-indigo-50 via-white to-purple-50 py-16">
+				<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+					<div className="mb-8 flex items-center justify-between">
 						<div className="flex items-center gap-4">
 							<div className="flex items-center gap-2">
 								<span className="text-3xl">⚡</span>
 								<h2 className="text-2xl font-bold text-gray-900">Flash Sale</h2>
 							</div>
-							<div className="flex items-center gap-2 bg-red-500 text-white px-4 py-2 rounded-full text-sm font-semibold shadow-lg shadow-red-200">
+							<div className="flex items-center gap-2 rounded-full bg-red-500 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-red-200">
 								<span>Ends in</span>
 								<span className="font-mono">02:45:30</span>
 							</div>
 						</div>
-						<Button variant="outline" className="border-indigo-200 text-indigo-600 hover:bg-indigo-50 hover:border-indigo-300">
+						<Button variant="outline" className="border-indigo-200 text-indigo-600 hover:border-indigo-300 hover:bg-indigo-50">
 							View All
 						</Button>
 					</div>
-					<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+					<div className="grid gap-6 grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
 						{[products[0], products[1], products[4], products[5]].map((product) => (
 							<Link key={product.id} href={`/product/${product.id}`}>
-								<Card className="overflow-hidden hover:shadow-2xl hover:shadow-indigo-100/50 transition-all duration-300 group border-0">
+								<Card className="group overflow-hidden border-0 transition-all duration-300 hover:shadow-2xl hover:shadow-indigo-100/50">
 									<div className="relative aspect-square overflow-hidden bg-gray-100">
-										<img src={product.image} alt={product.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
-										<div className="absolute top-3 left-3 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-md">
+										<Image src={product.image} alt={product.name} fill className="object-cover transition-transform duration-500 group-hover:scale-110" />
+										<div className="absolute left-3 top-3 rounded-md bg-red-500 px-2 py-1 text-xs font-bold text-white">
 											-{Math.round((1 - product.price / product.originalPrice) * 100)}%
 										</div>
 										<Button
 											size="icon"
 											variant="secondary"
-											className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-all duration-300 shadow-lg hover:bg-indigo-600 hover:text-white"
+											className="absolute right-3 top-3 shadow-lg transition-all duration-300 opacity-0 group-hover:opacity-100 hover:bg-indigo-600 hover:text-white"
 											onClick={(e) => {
 												e.preventDefault();
 											}}>
-											<Heart className="h-4 w-4" />
+											<Heart className="size-4" />
 										</Button>
 									</div>
 									<CardContent className="p-4">
-										<p className="text-xs text-indigo-600 font-medium mb-1">{product.category}</p>
-										<h3 className="font-semibold text-gray-900 text-sm line-clamp-2 mb-2 min-h-[2.5rem]">{product.name}</h3>
-										<div className="flex items-center gap-1 text-sm mb-2">
-											<Star className="h-3.5 w-3.5 fill-yellow-400 text-yellow-400" />
+										<p className="mb-1 text-xs font-medium text-indigo-600">{product.category}</p>
+										<h3 className="mb-2 min-h-[2.5rem] text-sm font-semibold text-gray-900 line-clamp-2">{product.name}</h3>
+										<div className="mb-2 flex items-center gap-1 text-sm">
+											<Star className="size-3.5 fill-yellow-400 text-yellow-400" />
 											<span className="font-semibold text-gray-900">{product.rating}</span>
-											<span className="text-gray-400 text-xs">({product.reviews})</span>
+											<span className="text-xs text-gray-400">({product.reviews})</span>
 										</div>
-										<p className="font-bold text-lg text-gray-900">{formatPrice(product.price)}</p>
+										<p className="text-lg font-bold text-gray-900">{formatPrice(product.price)}</p>
 										<p className="text-xs text-gray-400 line-through">{formatPrice(product.originalPrice)}</p>
 									</CardContent>
 									<CardFooter className="p-4 pt-0">
-										<Button className="w-full bg-gray-900 hover:bg-indigo-600 transition-colors shadow-lg" size="sm">
-											<ShoppingCart className="h-4 w-4 mr-2" />
-											Add to Cart
-										</Button>
+										{isLoggedIn && (
+											<Button className="w-full bg-gray-900 shadow-lg transition-colors hover:bg-indigo-600" size="sm">
+												<ShoppingCart className="mr-2 size-4" />
+												Add to Cart
+											</Button>
+										)}
 									</CardFooter>
 								</Card>
 							</Link>
@@ -370,50 +513,52 @@ export default function HomePage() {
 				</div>
 			</section>
 
-			<section className="py-16 bg-white">
-				<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-					<div className="flex items-center justify-between mb-10">
+			<section className="bg-white py-16">
+				<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+					<div className="mb-10 flex items-center justify-between">
 						<div>
 							<h2 className="text-2xl font-bold text-gray-900">Recommended For You</h2>
-							<p className="text-gray-500 mt-1">Based on your interests and recent activity</p>
+							<p className="mt-1 text-gray-500">Based on your interests and recent activity</p>
 						</div>
-						<Button variant="link" className="text-indigo-600 hover:text-indigo-700 text-sm font-medium">
+						<Button variant="link" className="text-sm font-medium text-indigo-600 hover:text-indigo-700">
 							View All
-							<ChevronRight className="ml-1 h-4 w-4" />
+							<ChevronRight className="ml-1 size-4" />
 						</Button>
 					</div>
-					<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+					<div className="grid gap-6 grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
 						{products.map((product) => (
 							<Link key={product.id} href={`/product/${product.id}`}>
-								<Card className="overflow-hidden hover:shadow-2xl hover:shadow-indigo-100/50 transition-all duration-300 group border-0 bg-white">
+								<Card className="group overflow-hidden border-0 bg-white transition-all duration-300 hover:shadow-2xl hover:shadow-indigo-100/50">
 									<div className="relative aspect-square overflow-hidden bg-gray-100">
-										<img src={product.image} alt={product.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+										<Image src={product.image} alt={product.name} fill className="object-cover transition-transform duration-500 group-hover:scale-110" />
 										<Button
 											size="icon"
 											variant="secondary"
-											className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-all duration-300 shadow-lg hover:bg-indigo-600 hover:text-white"
+											className="absolute right-3 top-3 shadow-lg transition-all duration-300 opacity-0 group-hover:opacity-100 hover:bg-indigo-600 hover:text-white"
 											onClick={(e) => {
 												e.preventDefault();
 											}}>
-											<Heart className="h-4 w-4" />
+											<Heart className="size-4" />
 										</Button>
 									</div>
 									<CardContent className="p-4">
-										<p className="text-xs text-indigo-600 font-medium mb-1">{product.category}</p>
-										<h3 className="font-semibold text-gray-900 text-sm line-clamp-2 mb-2 min-h-[2.5rem]">{product.name}</h3>
-										<div className="flex items-center gap-1 text-sm mb-2">
-											<Star className="h-3.5 w-3.5 fill-yellow-400 text-yellow-400" />
+										<p className="mb-1 text-xs font-medium text-indigo-600">{product.category}</p>
+										<h3 className="mb-2 min-h-[2.5rem] text-sm font-semibold text-gray-900 line-clamp-2">{product.name}</h3>
+										<div className="mb-2 flex items-center gap-1 text-sm">
+											<Star className="size-3.5 fill-yellow-400 text-yellow-400" />
 											<span className="font-semibold text-gray-900">{product.rating}</span>
-											<span className="text-gray-400 text-xs">({product.reviews})</span>
+											<span className="text-xs text-gray-400">({product.reviews})</span>
 										</div>
-										<p className="font-bold text-lg text-gray-900">{formatPrice(product.price)}</p>
+										<p className="text-lg font-bold text-gray-900">{formatPrice(product.price)}</p>
 										<p className="text-xs text-gray-400 line-through">{formatPrice(product.originalPrice)}</p>
 									</CardContent>
 									<CardFooter className="p-4 pt-0">
-										<Button className="w-full bg-gray-900 hover:bg-indigo-600 transition-colors shadow-lg" size="sm">
-											<ShoppingCart className="h-4 w-4 mr-2" />
-											Add to Cart
-										</Button>
+										{isLoggedIn && (
+											<Button className="w-full bg-gray-900 shadow-lg transition-colors hover:bg-indigo-600" size="sm">
+												<ShoppingCart className="mr-2 size-4" />
+												Add to Cart
+											</Button>
+										)}
 									</CardFooter>
 								</Card>
 							</Link>
@@ -422,12 +567,12 @@ export default function HomePage() {
 				</div>
 			</section>
 
-			<section className="py-16 bg-gray-900">
-				<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-					<div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+			<section className="bg-gray-900 py-16">
+				<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+					<div className="grid gap-8 grid-cols-2 md:grid-cols-4">
 						<div className="flex items-center gap-4">
-							<div className="w-14 h-14 rounded-2xl bg-indigo-600/20 flex items-center justify-center">
-								<Package className="h-7 w-7 text-indigo-400" />
+							<div className="flex size-14 items-center justify-center rounded-2xl bg-indigo-600/20">
+								<Package className="size-7 text-indigo-400" />
 							</div>
 							<div>
 								<h4 className="font-semibold text-white">Free Shipping</h4>
@@ -435,8 +580,8 @@ export default function HomePage() {
 							</div>
 						</div>
 						<div className="flex items-center gap-4">
-							<div className="w-14 h-14 rounded-2xl bg-indigo-600/20 flex items-center justify-center">
-								<CreditCard className="h-7 w-7 text-indigo-400" />
+							<div className="flex size-14 items-center justify-center rounded-2xl bg-indigo-600/20">
+								<CreditCard className="size-7 text-indigo-400" />
 							</div>
 							<div>
 								<h4 className="font-semibold text-white">Secure Payment</h4>
@@ -444,8 +589,8 @@ export default function HomePage() {
 							</div>
 						</div>
 						<div className="flex items-center gap-4">
-							<div className="w-14 h-14 rounded-2xl bg-indigo-600/20 flex items-center justify-center">
-								<Headphones className="h-7 w-7 text-indigo-400" />
+							<div className="flex size-14 items-center justify-center rounded-2xl bg-indigo-600/20">
+								<Headphones className="size-7 text-indigo-400" />
 							</div>
 							<div>
 								<h4 className="font-semibold text-white">24/7 Support</h4>
@@ -453,8 +598,8 @@ export default function HomePage() {
 							</div>
 						</div>
 						<div className="flex items-center gap-4">
-							<div className="w-14 h-14 rounded-2xl bg-indigo-600/20 flex items-center justify-center">
-								<User className="h-7 w-7 text-indigo-400" />
+							<div className="flex size-14 items-center justify-center rounded-2xl bg-indigo-600/20">
+								<User className="size-7 text-indigo-400" />
 							</div>
 							<div>
 								<h4 className="font-semibold text-white">Member Rewards</h4>
@@ -466,56 +611,56 @@ export default function HomePage() {
 			</section>
 
 			<footer className="bg-gray-950 text-white">
-				<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
+				<div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+					<div className="grid gap-10 grid-cols-1 md:grid-cols-2 lg:grid-cols-5">
 						<div className="lg:col-span-2">
-							<h3 className="text-2xl font-bold mb-4">
+							<h3 className="mb-4 text-2xl font-bold">
 								<span className="text-indigo-400">Shop</span>Co
 							</h3>
-							<p className="text-gray-400 text-sm mb-6 max-w-sm">
+							<p className="mb-6 max-w-sm text-sm text-gray-400">
 								Your trusted online store for premium products. We curate the best quality items to enhance your lifestyle with exceptional value.
 							</p>
 							<div className="flex gap-3">
-								<Button size="icon" variant="ghost" className="bg-gray-800 hover:bg-indigo-600 rounded-xl transition-colors">
+								<Button size="icon" variant="ghost" className="rounded-xl bg-gray-800 transition-colors hover:bg-indigo-600">
 									<span className="text-lg">📘</span>
 								</Button>
-								<Button size="icon" variant="ghost" className="bg-gray-800 hover:bg-indigo-600 rounded-xl transition-colors">
+								<Button size="icon" variant="ghost" className="rounded-xl bg-gray-800 transition-colors hover:bg-indigo-600">
 									<span className="text-lg">📸</span>
 								</Button>
-								<Button size="icon" variant="ghost" className="bg-gray-800 hover:bg-indigo-600 rounded-xl transition-colors">
+								<Button size="icon" variant="ghost" className="rounded-xl bg-gray-800 transition-colors hover:bg-indigo-600">
 									<span className="text-lg">🐦</span>
 								</Button>
 							</div>
 						</div>
 						<div>
-							<h4 className="font-semibold mb-4 text-white">Shop</h4>
+							<h4 className="mb-4 font-semibold text-white">Shop</h4>
 							<ul className="space-y-3 text-sm text-gray-400">
-								<li><a href="#" className="hover:text-indigo-400 transition-colors">New Arrivals</a></li>
-								<li><a href="#" className="hover:text-indigo-400 transition-colors">Best Sellers</a></li>
-								<li><a href="#" className="hover:text-indigo-400 transition-colors">Sale</a></li>
-								<li><a href="#" className="hover:text-indigo-400 transition-colors">All Products</a></li>
+								<li><a href="#" className="transition-colors hover:text-indigo-400">New Arrivals</a></li>
+								<li><a href="#" className="transition-colors hover:text-indigo-400">Best Sellers</a></li>
+								<li><a href="#" className="transition-colors hover:text-indigo-400">Sale</a></li>
+								<li><a href="#" className="transition-colors hover:text-indigo-400">All Products</a></li>
 							</ul>
 						</div>
 						<div>
-							<h4 className="font-semibold mb-4 text-white">Support</h4>
+							<h4 className="mb-4 font-semibold text-white">Support</h4>
 							<ul className="space-y-3 text-sm text-gray-400">
-								<li><a href="#" className="hover:text-indigo-400 transition-colors">Help Center</a></li>
-								<li><a href="#" className="hover:text-indigo-400 transition-colors">Order Status</a></li>
-								<li><a href="#" className="hover:text-indigo-400 transition-colors">Shipping Info</a></li>
-								<li><a href="#" className="hover:text-indigo-400 transition-colors">Returns</a></li>
+								<li><a href="#" className="transition-colors hover:text-indigo-400">Help Center</a></li>
+								<li><a href="#" className="transition-colors hover:text-indigo-400">Order Status</a></li>
+								<li><a href="#" className="transition-colors hover:text-indigo-400">Shipping Info</a></li>
+								<li><a href="#" className="transition-colors hover:text-indigo-400">Returns</a></li>
 							</ul>
 						</div>
 						<div>
-							<h4 className="font-semibold mb-4 text-white">Company</h4>
+							<h4 className="mb-4 font-semibold text-white">Company</h4>
 							<ul className="space-y-3 text-sm text-gray-400">
-								<li><a href="#" className="hover:text-indigo-400 transition-colors">About Us</a></li>
-								<li><a href="#" className="hover:text-indigo-400 transition-colors">Careers</a></li>
-								<li><a href="#" className="hover:text-indigo-400 transition-colors">Contact</a></li>
-								<li><a href="#" className="hover:text-indigo-400 transition-colors">Privacy Policy</a></li>
+								<li><a href="#" className="transition-colors hover:text-indigo-400">About Us</a></li>
+								<li><a href="#" className="transition-colors hover:text-indigo-400">Careers</a></li>
+								<li><a href="#" className="transition-colors hover:text-indigo-400">Contact</a></li>
+								<li><a href="#" className="transition-colors hover:text-indigo-400">Privacy Policy</a></li>
 							</ul>
 						</div>
 					</div>
-					<div className="border-t border-gray-800 mt-12 pt-8 text-center text-sm text-gray-500">
+					<div className="mt-12 border-t border-gray-800 pt-8 text-center text-sm text-gray-500">
 						<p>&copy; 2024 ShopCo. All rights reserved.</p>
 					</div>
 				</div>
