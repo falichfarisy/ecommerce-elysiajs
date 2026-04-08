@@ -122,7 +122,7 @@ export default function HomePage() {
 	return (
 		<div className="bg-[#FAFAFA] flex min-h-screen flex-col">
 			{isLogin && (
-				<div className="fixed inset-0 z-[100] flex items-center justify-center">
+				<div className="fixed inset-0 z-100 flex items-center justify-center">
 					<div className="bg-black/60 backdrop-blur-sm absolute inset-0" onClick={() => setIsLogin(false)} />
 					<div className="relative z-10">
 						<LoginPage onClose={() => setIsLogin(false)} />
@@ -131,7 +131,7 @@ export default function HomePage() {
 			)}
 
 			{isMobileMenuOpen && (
-				<div className="fixed inset-0 z-[200] md:hidden">
+				<div className="fixed inset-0 z-200 md:hidden">
 					<div className="bg-black/50 absolute inset-0" onClick={() => setIsMobileMenuOpen(false)} />
 					<div className="animate-in slide-in-from-left bg-white shadow-2xl absolute bottom-0 left-0 top-0 w-80 max-w-[85vw] duration-300">
 						<div className="border-b flex items-center justify-between p-4">
@@ -334,7 +334,7 @@ export default function HomePage() {
 				</div>
 			</header>
 
-			<section className="relative w-full overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 py-12 lg:py-20">
+			<section className="relative w-full overflow-hidden bg-linear-to-br from-slate-900 via-slate-800 to-slate-900 py-12 lg:py-20">
 				<div className="absolute inset-0 opacity-30">
 					<div className="absolute -left-40 top-0 size-80 rounded-full bg-indigo-500 blur-3xl mix-blend-multiply animate-pulse" />
 					<div className="absolute -right-40 bottom-0 size-80 rounded-full bg-purple-500 blur-3xl mix-blend-multiply animate-pulse delay-1000" />
@@ -343,15 +343,15 @@ export default function HomePage() {
 					<Carousel className="w-full" opts={{ loop: true }}>
 						<CarouselContent>
 							<CarouselItem>
-								<div className="relative h-[400px] md:h-[500px] overflow-hidden rounded-3xl">
-									<div className="absolute inset-0 bg-gradient-to-r from-slate-900/90 to-slate-900/40" />
-									<Image src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1600&h=900&fit=crop" alt="Hero" fill className="object-cover" />
+								<div className="relative h-100 md:h-125 overflow-hidden rounded-3xl">
+									<div className="absolute inset-0 bg-linear-to-r from-slate-900/90 to-slate-900/40" />
+									<Image src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1600&h=900&fit=crop" alt="Hero" fill sizes="100vw" className="object-cover" />
 									<div className="absolute inset-0 flex items-center">
 										<div className="max-w-2xl px-8 md:px-16">
 											<span className="mb-6 inline-block rounded-full bg-indigo-600/90 px-4 py-1.5 text-sm font-medium text-white backdrop-blur-sm">
 												Limited Time Offer
 											</span>
-											<h2 className="mb-4 text-4xl font-bold leading-tight text-white md:text-6xl">
+											<h2 className="mb-4 text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold leading-tight text-white">
 												Discover <span className="text-indigo-400">Premium</span> Products
 											</h2>
 											<p className="mb-8 max-w-lg text-lg text-gray-300">
@@ -362,7 +362,7 @@ export default function HomePage() {
 													Shop Now
 													<ChevronRight className="ml-2 size-4" />
 												</Button>
-												<Button size="lg" variant="outline" className="border-white/30 text-white backdrop-blur-sm hover:bg-white/10">
+												<Button size="lg" variant="outline" className="border-white/40 text-gray-100 bg-white/10 backdrop-blur-sm hover:bg-white/20 hover:border-white/60">
 													View Collection
 												</Button>
 											</div>
@@ -371,15 +371,15 @@ export default function HomePage() {
 								</div>
 							</CarouselItem>
 							<CarouselItem>
-								<div className="relative h-[400px] md:h-[500px] overflow-hidden rounded-3xl">
-									<div className="absolute inset-0 bg-gradient-to-r from-purple-900/90 to-purple-900/40" />
-									<Image src="https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=1600&h=900&fit=crop" alt="Fashion" fill className="object-cover" />
+								<div className="relative h-100 md:h-125 overflow-hidden rounded-3xl">
+									<div className="absolute inset-0 bg-linear-to-r from-purple-900/90 to-purple-900/40" />
+									<Image src="https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=1600&h=900&fit=crop" alt="Fashion" fill sizes="100vw" className="object-cover" />
 									<div className="absolute inset-0 flex items-center">
 										<div className="max-w-2xl px-8 md:px-16">
 											<span className="mb-6 inline-block rounded-full bg-purple-600/90 px-4 py-1.5 text-sm font-medium text-white backdrop-blur-sm">
 												New Collection
 											</span>
-											<h2 className="mb-4 text-4xl font-bold leading-tight text-white md:text-6xl">
+											<h2 className="mb-4 text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold leading-tight text-white">
 												Summer <span className="text-purple-400">Essentials</span>
 											</h2>
 											<p className="mb-8 max-w-lg text-lg text-gray-300">
@@ -394,15 +394,15 @@ export default function HomePage() {
 								</div>
 							</CarouselItem>
 							<CarouselItem>
-								<div className="relative h-[400px] md:h-[500px] overflow-hidden rounded-3xl">
-									<div className="absolute inset-0 bg-gradient-to-r from-emerald-900/90 to-emerald-900/40" />
-									<Image src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=1600&h=900&fit=crop" alt="Home" fill className="object-cover" />
+								<div className="relative h-100 md:h-125 overflow-hidden rounded-3xl">
+									<div className="absolute inset-0 bg-linear-to-r from-emerald-900/90 to-emerald-900/40" />
+									<Image src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=1600&h=900&fit=crop" alt="Home" fill sizes="100vw" className="object-cover" />
 									<div className="absolute inset-0 flex items-center">
 										<div className="max-w-2xl px-8 md:px-16">
 											<span className="mb-6 inline-block rounded-full bg-emerald-600/90 px-4 py-1.5 text-sm font-medium text-white backdrop-blur-sm">
 												Free Shipping
 											</span>
-											<h2 className="mb-4 text-4xl font-bold leading-tight text-white md:text-6xl">
+											<h2 className="mb-4 text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold leading-tight text-white">
 												Home <span className="text-emerald-400">Essentials</span>
 											</h2>
 											<p className="mb-8 max-w-lg text-lg text-gray-300">
@@ -438,8 +438,8 @@ export default function HomePage() {
 								key={category.name}
 								className="group flex flex-col items-center rounded-2xl p-4 transition-all duration-300 hover:bg-gray-50 hover:shadow-lg hover:shadow-indigo-100/50">
 								<div className="relative mb-3 size-16 overflow-hidden rounded-2xl shadow-md md:size-20">
-									<Image src={category.image} alt={category.name} fill className="object-cover transition-transform duration-500 group-hover:scale-110" />
-									<div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
+									<Image src={category.image} alt={category.name} fill sizes="(max-width: 768px) 25vw, (max-width: 1024px) 16vw, 12vw" className="object-cover transition-transform duration-500 group-hover:scale-110" />
+									<div className="absolute inset-0 bg-linear-to-t from-black/30 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
 								</div>
 								<span className="text-sm font-semibold text-gray-700 transition-colors group-hover:text-indigo-600">
 									{category.name}
@@ -451,7 +451,7 @@ export default function HomePage() {
 				</div>
 			</section>
 
-			<section className="bg-gradient-to-br from-indigo-50 via-white to-purple-50 py-16">
+			<section className="bg-linear-to-br from-indigo-50 via-white to-purple-50 py-16">
 				<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 					<div className="mb-8 flex items-center justify-between">
 						<div className="flex items-center gap-4">
@@ -473,7 +473,7 @@ export default function HomePage() {
 							<Link key={product.id} href={`/product/${product.id}`}>
 								<Card className="group overflow-hidden border-0 transition-all duration-300 hover:shadow-2xl hover:shadow-indigo-100/50">
 									<div className="relative aspect-square overflow-hidden bg-gray-100">
-										<Image src={product.image} alt={product.name} fill className="object-cover transition-transform duration-500 group-hover:scale-110" />
+										<Image src={product.image} alt={product.name} fill sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 25vw" className="object-cover transition-transform duration-500 group-hover:scale-110" />
 										<div className="absolute left-3 top-3 rounded-md bg-red-500 px-2 py-1 text-xs font-bold text-white">
 											-{Math.round((1 - product.price / product.originalPrice) * 100)}%
 										</div>
@@ -489,7 +489,7 @@ export default function HomePage() {
 									</div>
 									<CardContent className="p-4">
 										<p className="mb-1 text-xs font-medium text-indigo-600">{product.category}</p>
-										<h3 className="mb-2 min-h-[2.5rem] text-sm font-semibold text-gray-900 line-clamp-2">{product.name}</h3>
+										<h3 className="mb-2 min-h-10 text-sm font-semibold text-gray-900 line-clamp-2">{product.name}</h3>
 										<div className="mb-2 flex items-center gap-1 text-sm">
 											<Star className="size-3.5 fill-yellow-400 text-yellow-400" />
 											<span className="font-semibold text-gray-900">{product.rating}</span>
@@ -530,7 +530,7 @@ export default function HomePage() {
 							<Link key={product.id} href={`/product/${product.id}`}>
 								<Card className="group overflow-hidden border-0 bg-white transition-all duration-300 hover:shadow-2xl hover:shadow-indigo-100/50">
 									<div className="relative aspect-square overflow-hidden bg-gray-100">
-										<Image src={product.image} alt={product.name} fill className="object-cover transition-transform duration-500 group-hover:scale-110" />
+										<Image src={product.image} alt={product.name} fill sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 25vw" className="object-cover transition-transform duration-500 group-hover:scale-110" />
 										<Button
 											size="icon"
 											variant="secondary"
@@ -543,7 +543,7 @@ export default function HomePage() {
 									</div>
 									<CardContent className="p-4">
 										<p className="mb-1 text-xs font-medium text-indigo-600">{product.category}</p>
-										<h3 className="mb-2 min-h-[2.5rem] text-sm font-semibold text-gray-900 line-clamp-2">{product.name}</h3>
+										<h3 className="mb-2 min-h-10 text-sm font-semibold text-gray-900 line-clamp-2">{product.name}</h3>
 										<div className="mb-2 flex items-center gap-1 text-sm">
 											<Star className="size-3.5 fill-yellow-400 text-yellow-400" />
 											<span className="font-semibold text-gray-900">{product.rating}</span>
