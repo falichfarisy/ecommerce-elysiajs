@@ -346,23 +346,23 @@ export default function HomePage() {
 								<div className="relative h-100 md:h-125 overflow-hidden rounded-3xl">
 									<div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-transparent z-10" />
 									<Image src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1600&h=900&fit=crop" alt="Hero" fill sizes="100vw" className="object-cover" />
-									<div className="absolute inset-0 flex items-center z-20">
+									<div className="absolute inset-0 flex items-end z-20 pb-12 md:pb-16">
 										<div className="max-w-2xl px-8 md:px-16">
-											<span className="mb-6 inline-block rounded-full bg-indigo-600/90 px-4 py-1.5 text-sm font-medium text-white backdrop-blur-sm">
+											<span className="mb-4 inline-block rounded-full bg-indigo-600/90 px-4 py-1.5 text-sm font-medium text-white backdrop-blur-sm">
 												Limited Time Offer
 											</span>
-											<h2 className="mb-4 text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold leading-tight text-white drop-shadow-lg">
+											<h2 className="mb-3 text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold leading-tight text-white drop-shadow-lg">
 												Discover <span className="text-indigo-300">Premium</span> Products
 											</h2>
-											<p className="mb-8 max-w-lg text-lg text-gray-200 drop-shadow-md">
+											<p className="mb-6 max-w-lg text-base sm:text-lg text-gray-200 drop-shadow-md">
 												Explore our curated collection of high-quality products at unbeatable prices. Free shipping on orders over Rp 100.000.
 											</p>
-											<div className="flex flex-wrap gap-4">
-												<Button size="lg" className="bg-white text-slate-900 shadow-xl hover:bg-gray-100">
+											<div className="flex flex-wrap gap-3 sm:gap-4">
+												<Button className="bg-white text-slate-900 shadow-xl hover:bg-gray-100 h-11 sm:h-12 px-5 sm:px-8 text-sm sm:text-base font-semibold">
 													Shop Now
-													<ChevronRight className="ml-2 size-4" />
+													<ChevronRight className="ml-2 size-4 sm:size-5" />
 												</Button>
-												<Button size="lg" variant="outline" className="border-white/40 text-gray-100 bg-white/10 backdrop-blur-sm hover:bg-white/20 hover:border-white/60">
+												<Button variant="outline" className="border-white/40 text-gray-100 bg-white/10 backdrop-blur-sm hover:bg-white/20 hover:border-white/60 h-11 sm:h-12 px-5 sm:px-8 text-sm sm:text-base font-semibold">
 													View Collection
 												</Button>
 											</div>
@@ -374,20 +374,20 @@ export default function HomePage() {
 								<div className="relative h-100 md:h-125 overflow-hidden rounded-3xl">
 									<div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-transparent z-10" />
 									<Image src="https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=1600&h=900&fit=crop" alt="Fashion" fill sizes="100vw" className="object-cover" />
-									<div className="absolute inset-0 flex items-center z-20">
+									<div className="absolute inset-0 flex items-end z-20 pb-12 md:pb-16">
 										<div className="max-w-2xl px-8 md:px-16">
-											<span className="mb-6 inline-block rounded-full bg-purple-600/90 px-4 py-1.5 text-sm font-medium text-white backdrop-blur-sm">
+											<span className="mb-4 inline-block rounded-full bg-purple-600/90 px-4 py-1.5 text-sm font-medium text-white backdrop-blur-sm">
 												New Collection
 											</span>
-											<h2 className="mb-4 text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold leading-tight text-white drop-shadow-lg">
+											<h2 className="mb-3 text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold leading-tight text-white drop-shadow-lg">
 												Summer <span className="text-purple-300">Essentials</span>
 											</h2>
-											<p className="mb-8 max-w-lg text-lg text-gray-200 drop-shadow-md">
+											<p className="mb-6 max-w-lg text-base sm:text-lg text-gray-200 drop-shadow-md">
 												Refresh your wardrobe with our latest summer collection. Trendy styles that combine comfort and elegance.
 											</p>
-											<Button size="lg" className="bg-white text-purple-900 shadow-xl hover:bg-gray-100">
+											<Button className="bg-white text-purple-900 shadow-xl hover:bg-gray-100 h-11 sm:h-12 px-5 sm:px-8 text-sm sm:text-base font-semibold">
 												Explore Now
-												<ChevronRight className="ml-2 size-4" />
+												<ChevronRight className="ml-2 size-4 sm:size-5" />
 											</Button>
 										</div>
 									</div>
@@ -397,20 +397,20 @@ export default function HomePage() {
 								<div className="relative h-100 md:h-125 overflow-hidden rounded-3xl">
 									<div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-transparent z-10" />
 									<Image src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=1600&h=900&fit=crop" alt="Home" fill sizes="100vw" className="object-cover" />
-									<div className="absolute inset-0 flex items-center z-20">
+									<div className="absolute inset-0 flex items-end z-20 pb-12 md:pb-16">
 										<div className="max-w-2xl px-8 md:px-16">
-											<span className="mb-6 inline-block rounded-full bg-emerald-600/90 px-4 py-1.5 text-sm font-medium text-white backdrop-blur-sm">
+											<span className="mb-4 inline-block rounded-full bg-emerald-600/90 px-4 py-1.5 text-sm font-medium text-white backdrop-blur-sm">
 												Free Shipping
 											</span>
-											<h2 className="mb-4 text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold leading-tight text-white drop-shadow-lg">
+											<h2 className="mb-3 text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold leading-tight text-white drop-shadow-lg">
 												Home <span className="text-emerald-300">Essentials</span>
 											</h2>
-											<p className="mb-8 max-w-lg text-lg text-gray-200 drop-shadow-md">
+											<p className="mb-6 max-w-lg text-base sm:text-lg text-gray-200 drop-shadow-md">
 												Transform your living space with our premium home essentials. Quality products for your dream home.
 											</p>
-											<Button size="lg" className="bg-white text-emerald-900 shadow-xl hover:bg-gray-100">
+											<Button className="bg-white text-emerald-900 shadow-xl hover:bg-gray-100 h-11 sm:h-12 px-5 sm:px-8 text-sm sm:text-base font-semibold">
 												Browse Now
-												<ChevronRight className="ml-2 size-4" />
+												<ChevronRight className="ml-2 size-4 sm:size-5" />
 											</Button>
 										</div>
 									</div>
