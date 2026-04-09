@@ -1,36 +1,183 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Frontend Documentation
 
-## Getting Started
+## Overview
 
-First, run the development server:
+Next.js 15 e-commerce frontend with App Router, Tailwind CSS, and shadcn/ui components.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## Tech Stack
+
+- **Next.js 15** - App Router, Turbopack
+- **React 19** - UI library
+- **Tailwind CSS** - Utility-first CSS
+- **shadcn/ui** - Component library
+- **TypeScript** - Type safety
+
+## Project Structure
+
+```
+frontend/
+├── app/                    # App Router
+│   ├── home/              # Home page component
+│   ├── product/[id]/      # Product detail page
+│   ├── cart/              # Shopping cart page
+│   ├── login/             # Login page
+│   ├── register/          # Registration page
+│   ├── ApiConfig.ts       # API client
+│   ├── layout.tsx        # Root layout
+│   └── page.tsx          # Root redirect
+│
+├── components/
+│   └── ui/               # shadcn/ui components
+│       ├── Button.tsx
+│       ├── Card.tsx
+│       ├── Input.tsx
+│       └── ...
+│
+├── lib/
+│   └── utils.ts          # Utilities (cn function)
+│
+├── public/               # Static assets
+├── tailwind.config.ts     # Tailwind config
+├── next.config.ts        # Next.js config
+└── package.json
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Pages
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Home Page (`/`)
+- Hero carousel with promotions
+- Category navigation
+- Flash sale section
+- Recommended products grid
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Product Detail (`/product/[id]`)
+- Image gallery with thumbnails
+- Product info (name, brand, price)
+- Rating and reviews
+- Quantity selector
+- Add to cart button
+- Tabs: Description, Specifications, Reviews, FAQ
 
-## Learn More
+### Shopping Cart (`/cart`)
+- Cart items list with quantity controls
+- Order summary
+- Promo code input
+- Checkout button
+- Trust badges
 
-To learn more about Next.js, take a look at the following resources:
+### Auth Pages (`/login`, `/register`)
+- Form with validation
+- Session management
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Components
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Button
+```tsx
+import { Button } from "@/components/ui/Button";
 
-## Deploy on Vercel
+// Variants: default, outline, ghost, secondary, link
+// Sizes: sm, md, lg, icon, icon-sm
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+<Button>Click me</Button>
+<Button variant="outline">Outline</Button>
+<Button size="sm">Small</Button>
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Card
+```tsx
+import { Card, CardContent, CardFooter } from "@/components/ui/Card";
+
+<Card>
+  <CardContent>Content here</CardContent>
+  <CardFooter>Footer here</CardFooter>
+</Card>
+```
+
+### Input
+```tsx
+import { Input } from "@/components/ui/Input";
+
+<Input type="email" placeholder="email@example.com" />
+```
+
+## API Integration
+
+### Using getData
+```tsx
+import { getData } from "@/app/ApiConfig";
+
+const data = await getData("/api/endpoint");
+```
+
+## Styling
+
+### Tailwind Classes
+
+**Layout**
+- `flex`, `grid`, `block`
+- `container`, `mx-auto`, `px-4`
+
+**Spacing**
+- `p-4`, `m-4`, `gap-4`
+- `pt-4`, `pb-4`, `mt-4`, `mb-4`
+
+**Typography**
+- `text-xl`, `font-bold`, `text-gray-900`
+- `leading-tight`, `line-clamp-2`
+
+**Colors**
+- `bg-white`, `bg-gray-50`, `bg-indigo-600`
+- `text-gray-500`, `text-indigo-600`
+
+**Effects**
+- `shadow-sm`, `shadow-lg`, `shadow-xl`
+- `rounded-lg`, `rounded-xl`, `rounded-full`
+- `transition-all`, `duration-300`
+
+## Responsive Design
+
+```tsx
+// Mobile first approach
+<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+```
+
+Breakpoints:
+- `sm` - 640px
+- `md` - 768px  
+- `lg` - 1024px
+- `xl` - 1280px
+
+## Running Locally
+
+```bash
+npm install
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000)
+
+## Building
+
+```bash
+# Development
+npm run dev
+
+# Production
+npm run build
+npm run start
+```
+
+## Environment Variables
+
+```env
+NEXT_PUBLIC_API_URL=http://localhost:3001
+```
+
+## Code Conventions
+
+1. Use `cn()` utility from lib/utils.ts for conditional classes
+2. Use shadcn/ui components from components/ui/
+3. Follow Tailwind CSS ordering (layout → spacing → sizing → colors → effects → typography → transitions)
+4. Use `asChild` prop for polymorphic components
+5. Keep components in components/ui/
+6. Use `.tsx` for React components
