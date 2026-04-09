@@ -228,21 +228,9 @@ export default function ProductDetailPage() {
 	const [quantity, setQuantity] = useState(1);
 	const [selectedImage, setSelectedImage] = useState(0);
 	const [activeTab, setActiveTab] = useState<"description" | "specs" | "reviews" | "faq">("description");
-	const [isLoggedIn, setIsLoggedIn] = useState(false);
-	const [isLoading, setIsLoading] = useState(true);
 
 	useEffect(() => {
-		const checkAuth = async () => {
-			try {
-				const result = await getData("/api/auth/get-session");
-				setIsLoggedIn(!!result);
-			} catch {
-				setIsLoggedIn(false);
-			} finally {
-				setIsLoading(false);
-			}
-		};
-		checkAuth();
+		getData("/api/auth/get-session").catch(() => { });
 	}, []);
 
 	const discount = Math.round((1 - product.price / product.originalPrice) * 100);

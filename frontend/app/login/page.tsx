@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Label } from "@/components/ui/Label";
 import { Checkbox } from "@/components/ui/Checkbox";
-import { Spinner } from "@/components/ui/Spinner";
 import { postData } from "../ApiConfig";
 
 export default function LoginPage({ onClose }: { onClose?: () => void }) {
@@ -42,8 +41,9 @@ export default function LoginPage({ onClose }: { onClose?: () => void }) {
 			} else {
 				setError(result.message || "Login failed");
 			}
-		} catch (err: any) {
-			setError(err.response?.data?.message || "Something went wrong");
+		} catch (err: unknown) {
+			const error = err as { response?: { data?: { message?: string } } };
+			setError(error.response?.data?.message || "Something went wrong");
 		} finally {
 			setIsLoading(false);
 		}

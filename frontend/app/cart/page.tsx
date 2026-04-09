@@ -6,7 +6,6 @@ import Image from "next/image";
 import {
 	ShoppingCart,
 	Heart,
-	Trash2,
 	Plus,
 	Minus,
 	ChevronRight,
@@ -63,21 +62,11 @@ const formatPrice = (price: number) => {
 
 export default function CartPage() {
 	const [cartItems, setCartItems] = useState<CartItem[]>(sampleCartItems);
-	const [isLoggedIn, setIsLoggedIn] = useState(false);
-	const [isLoading, setIsLoading] = useState(true);
 
 	useEffect(() => {
-		const checkAuth = async () => {
-			try {
-				const result = await getData("/api/auth/get-session");
-				setIsLoggedIn(!!result);
-			} catch {
-				setIsLoggedIn(false);
-			} finally {
-				setIsLoading(false);
-			}
-		};
-		checkAuth();
+		getData("/api/auth/get-session").catch(() => {
+			// not logged in
+		});
 	}, []);
 
 	const updateQuantity = (id: number, delta: number) => {
@@ -149,7 +138,7 @@ export default function CartPage() {
 							<ShoppingCart className="size-12 text-gray-400" />
 						</div>
 						<h2 className="text-xl font-semibold text-gray-900 mb-2">Your cart is empty</h2>
-						<p className="text-gray-500 mb-6">Looks like you haven't added anything to your cart yet.</p>
+						<p className="text-gray-500 mb-6">Looks like you haven&apos;t added anything to your cart yet.</p>
 						<Button asChild className="bg-indigo-600 hover:bg-indigo-700">
 							<Link href="/">Continue Shopping</Link>
 						</Button>
