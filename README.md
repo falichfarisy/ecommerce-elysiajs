@@ -113,6 +113,20 @@ npm run build   # Production build
 npm run start   # Start production
 ```
 
+## Test Account
+
+Demo user untuk testing:
+
+```json
+{
+  "email": "demo@shopco.com",
+  "password": "demo123456",
+  "username": "Demo User"
+}
+```
+
+Atau register via `/register` page untuk akun baru.
+
 ## License
 
 MIT
