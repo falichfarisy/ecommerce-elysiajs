@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Card, CardContent, CardFooter } from "@/components/ui/Card";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/Carousel";
-import LoginPage from "@/app/login/Page";
+import LoginPage from "@/app/login/page";
 import { useState, useEffect } from "react";
 import { getData } from "../ApiConfig";
 

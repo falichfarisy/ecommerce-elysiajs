@@ -172,7 +172,7 @@ export default function LoginPage({ onClose }: { onClose?: () => void }) {
 						</svg>
 						Masuk dengan Google
 					</Button>
-					<p className="mt-6 text-center text-sm text-gray-600">
+<p className="mt-6 text-center text-sm text-gray-600">
 						Belum punya akun?{" "}
 						<Link
 							href="/register"
