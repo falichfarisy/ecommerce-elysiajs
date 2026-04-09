@@ -1,20 +1,16 @@
-import { pgTable, text, integer, real, index, timestamp } from "drizzle-orm/pg-core";
+import { pgTable, text, integer, real, index, timestamp, boolean } from "drizzle-orm/pg-core";
 import { relations, sql } from "drizzle-orm";
 
 export const user = pgTable("user", {
 	id: text("id").primaryKey(),
 	name: text("name").notNull(),
 	email: text("email").notNull().unique(),
-	emailVerified: integer("email_verified", { mode: "boolean" })
+	emailVerified: boolean("email_verified")
 		.default(false)
 		.notNull(),
 	image: text("image"),
-	createdAt: timestamp("created_at", { mode: "date" })
-		.default(sql`now()`)
-		.notNull(),
-	updatedAt: timestamp("updated_at", { mode: "date" })
-		.default(sql`now()`)
-		.notNull(),
+	createdAt: timestamp("created_at", { mode: "date" }).default(sql`now()`).notNull(),
+	updatedAt: timestamp("updated_at", { mode: "date" }).default(sql`now()`).notNull(),
 });
 
 export const session = pgTable(
@@ -23,12 +19,8 @@ export const session = pgTable(
 		id: text("id").primaryKey(),
 		expiresAt: timestamp("expires_at", { mode: "date" }).notNull(),
 		token: text("token").notNull().unique(),
-		createdAt: timestamp("created_at", { mode: "date" })
-			.default(sql`now()`)
-			.notNull(),
-		updatedAt: timestamp("updated_at", { mode: "date" })
-			.default(sql`now()`)
-			.notNull(),
+		createdAt: timestamp("created_at", { mode: "date" }).default(sql`now()`).notNull(),
+		updatedAt: timestamp("updated_at", { mode: "date" }).default(sql`now()`).notNull(),
 		ipAddress: text("ip_address"),
 		userAgent: text("user_agent"),
 		userId: text("user_id")
@@ -54,12 +46,8 @@ export const account = pgTable(
 		refreshTokenExpiresAt: timestamp("refresh_token_expires_at", { mode: "date" }),
 		scope: text("scope"),
 		password: text("password"),
-		createdAt: timestamp("created_at", { mode: "date" })
-			.default(sql`now()`)
-			.notNull(),
-		updatedAt: timestamp("updated_at", { mode: "date" })
-			.default(sql`now()`)
-			.notNull(),
+		createdAt: timestamp("created_at", { mode: "date" }).default(sql`now()`).notNull(),
+		updatedAt: timestamp("updated_at", { mode: "date" }).default(sql`now()`).notNull(),
 	},
 	(table) => [index("account_userId_idx").on(table.userId)],
 );
@@ -71,12 +59,8 @@ export const verification = pgTable(
 		identifier: text("identifier").notNull(),
 		value: text("value").notNull(),
 		expiresAt: timestamp("expires_at", { mode: "date" }).notNull(),
-		createdAt: timestamp("created_at", { mode: "date" })
-			.default(sql`now()`)
-			.notNull(),
-		updatedAt: timestamp("updated_at", { mode: "date" })
-			.default(sql`now()`)
-			.notNull(),
+		createdAt: timestamp("created_at", { mode: "date" }).default(sql`now()`).notNull(),
+		updatedAt: timestamp("updated_at", { mode: "date" }).default(sql`now()`).notNull(),
 	},
 	(table) => [index("verification_identifier_idx").on(table.identifier)],
 );
@@ -100,12 +84,8 @@ export const products = pgTable("products", {
 	stock: integer("stock").notNull().default(0),
 	imageUrl: text("image_url"),
 	category: text("category"),
-	createdAt: timestamp("created_at", { mode: "date" })
-		.default(sql`now()`)
-		.notNull(),
-	updatedAt: timestamp("updated_at", { mode: "date" })
-		.default(sql`now()`)
-		.notNull(),
+	createdAt: timestamp("created_at", { mode: "date" }).default(sql`now()`).notNull(),
+	updatedAt: timestamp("updated_at", { mode: "date" }).default(sql`now()`).notNull(),
 });
 
 export const carts = pgTable("carts", {
@@ -117,9 +97,7 @@ export const carts = pgTable("carts", {
 		.notNull()
 		.references(() => products.id, { onDelete: "cascade" }),
 	quantity: integer("quantity").notNull().default(1),
-	createdAt: timestamp("created_at", { mode: "date" })
-		.default(sql`now()`)
-		.notNull(),
+	createdAt: timestamp("created_at", { mode: "date" }).default(sql`now()`).notNull(),
 });
 
 export const orders = pgTable("orders", {
@@ -134,12 +112,8 @@ export const orders = pgTable("orders", {
 	shippingAddress: text("shipping_address").notNull(),
 	phone: text("phone").notNull(),
 	notes: text("notes"),
-	createdAt: timestamp("created_at", { mode: "date" })
-		.default(sql`now()`)
-		.notNull(),
-	updatedAt: timestamp("updated_at", { mode: "date" })
-		.default(sql`now()`)
-		.notNull(),
+	createdAt: timestamp("created_at", { mode: "date" }).default(sql`now()`).notNull(),
+	updatedAt: timestamp("updated_at", { mode: "date" }).default(sql`now()`).notNull(),
 });
 
 export const orderItems = pgTable("order_items", {
@@ -152,9 +126,7 @@ export const orderItems = pgTable("order_items", {
 		.references(() => products.id),
 	quantity: integer("quantity").notNull(),
 	price: real("price").notNull(),
-	createdAt: timestamp("created_at", { mode: "date" })
-		.default(sql`now()`)
-		.notNull(),
+	createdAt: timestamp("created_at", { mode: "date" }).default(sql`now()`).notNull(),
 });
 
 export const reviews = pgTable("reviews", {
@@ -167,9 +139,7 @@ export const reviews = pgTable("reviews", {
 		.references(() => user.id, { onDelete: "cascade" }),
 	rating: integer("rating").notNull(),
 	comment: text("comment"),
-	createdAt: timestamp("created_at", { mode: "date" })
-		.default(sql`now()`)
-		.notNull(),
+	createdAt: timestamp("created_at", { mode: "date" }).default(sql`now()`).notNull(),
 });
 
 export const wishlists = pgTable("wishlists", {
@@ -180,9 +150,7 @@ export const wishlists = pgTable("wishlists", {
 	productId: integer("product_id")
 		.notNull()
 		.references(() => products.id, { onDelete: "cascade" }),
-	createdAt: timestamp("created_at", { mode: "date" })
-		.default(sql`now()`)
-		.notNull(),
+	createdAt: timestamp("created_at", { mode: "date" }).default(sql`now()`).notNull(),
 });
 
 export const userRelations = relations(user, ({ one }) => ({
