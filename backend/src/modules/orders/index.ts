@@ -1,7 +1,9 @@
 import { Elysia, t } from "elysia";
-import { db, orders, orderItems, carts, products } from "../../db";
+import { db, orders, orderItems, carts, products, user } from "../../db";
 import { eq } from "drizzle-orm";
 import { authMiddleware } from "../auth";
+import { deductStock } from "../inventory";
+import { sendEmail, emailTemplates } from "../email";
 
 export const ordersModule = new Elysia({ prefix: "/orders" })
 	.use(authMiddleware)
@@ -42,6 +44,15 @@ export const ordersModule = new Elysia({ prefix: "/orders" })
 
 			const total = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
+		// Pre-check stock availability for all items
+			for (const item of cartItems) {
+				const product = await db.select().from(products).where(eq(products.id, item.productId));
+				if (!product[0] || product[0].stock < item.quantity) {
+					context.set.status = 400;
+					return { success: false, message: `Insufficient stock for product ID ${item.productId}` };
+				}
+			}
+
 		const order = await db
 			.insert(orders)
 			.values({
@@ -50,7 +61,7 @@ export const ordersModule = new Elysia({ prefix: "/orders" })
 				shippingAddress,
 				phone,
 				notes: notes,
-			} as any)
+			})
 			.returning();
 
 		for (const item of cartItems) {
@@ -59,9 +70,22 @@ export const ordersModule = new Elysia({ prefix: "/orders" })
 				productId: item.productId,
 				quantity: item.quantity,
 				price: item.price,
-			} as any);
-				await db.delete(carts).where(eq(carts.id, item.cartId));
-			}
+			});
+			await deductStock(item.productId, item.quantity);
+			await db.delete(carts).where(eq(carts.id, item.cartId));
+		}
+
+		// Send order confirmation email
+		try {
+			const itemsList = cartItems.map(
+				(i) => `Product #${i.productId} x${i.quantity} - Rp ${(i.price * i.quantity).toLocaleString("id-ID")}`
+			);
+			const { subject, html } = emailTemplates.orderConfirmation(order[0].id, order[0].total, itemsList);
+			await sendEmail({ to: user.email, subject, html });
+		} catch (emailErr) {
+			console.error("Failed to send order email:", emailErr);
+			// Don't fail the order if email fails
+		}
 
 			return { success: true, data: order[0] };
 		},
