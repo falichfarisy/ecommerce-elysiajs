@@ -1,5 +1,5 @@
 import { Elysia, t } from "elysia";
-import { db, reviews } from "../../db";
+import { db, reviews, user } from "../../db";
 import { eq, desc, sql } from "drizzle-orm";
 import { authMiddleware } from "../auth";
 
@@ -9,8 +9,17 @@ export const reviewModule = new Elysia({ prefix: "/reviews" })
 	.get("/product/:productId", async ({ params, set }) => {
 		const productId = Number(params.productId);
 		const reviewsData = await db
-			.select()
+			.select({
+				id: reviews.id,
+				productId: reviews.productId,
+				userId: reviews.userId,
+				userName: user.name,
+				rating: reviews.rating,
+				comment: reviews.comment,
+				createdAt: reviews.createdAt,
+			})
 			.from(reviews)
+			.innerJoin(user, eq(reviews.userId, user.id))
 			.where(eq(reviews.productId, productId))
 			.orderBy(desc(reviews.createdAt));
 
@@ -65,7 +74,7 @@ export const reviewModule = new Elysia({ prefix: "/reviews" })
 				userId: user.id,
 				rating,
 				comment,
-			} as any)
+			})
 			.returning();
 
 			return { success: true, data: result[0] };
