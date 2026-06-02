@@ -14,7 +14,6 @@ const betterAuthHandler = async ({ request, set }: { request: Request; set: any 
 };
 
 export const authMiddleware = new Elysia({ name: "better-auth-middleware" })
-	.mount(auth.handler)
 	.derive(async ({ request, set }) => {
 		const session = await auth.api.getSession({
 			headers: request.headers,

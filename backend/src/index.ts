@@ -1,6 +1,7 @@
 import { Elysia } from "elysia";
 import { cors } from "@elysiajs/cors";
 import { openapi } from "@elysiajs/openapi";
+import { auth } from "./auth/auth";
 import { productsModule } from "./modules/products";
 import { authModule } from "./modules/auth";
 import { cartModule } from "./modules/cart";
@@ -17,12 +18,12 @@ import { wishlistModule } from "./modules/wishlist";
 
 const limiter = rateLimit({
 	duration: 60000,
-	max: 10,
+	max: 100,
 });
 
 const app = new Elysia()
 	.use(cors({
-		origin: ["http://localhost:3000", "http://localhost:3001", "http://localhost:3002"],
+		origin: (process.env.CORS_ORIGIN || "http://localhost:3000,http://localhost:3001").split(","),
 		methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
 		credentials: true,
 	}))
@@ -54,6 +55,7 @@ const app = new Elysia()
 			],
 		},
 	}))
+	.mount(auth.handler)
 	.onError(({ code, error, status }) => {
 		if (code === "VALIDATION") {
 			return status(400, { success: false, message: String(error) });
