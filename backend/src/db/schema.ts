@@ -89,7 +89,7 @@ export const products = pgTable("products", {
 });
 
 export const carts = pgTable("carts", {
-	id: integer("id").primaryKey(),
+	id: serial("id").primaryKey(),
 	userId: text("user_id")
 		.notNull()
 		.references(() => user.id, { onDelete: "cascade" }),
@@ -101,7 +101,7 @@ export const carts = pgTable("carts", {
 });
 
 export const orders = pgTable("orders", {
-	id: integer("id").primaryKey(),
+	id: serial("id").primaryKey(),
 	userId: text("user_id")
 		.notNull()
 		.references(() => user.id, { onDelete: "cascade" }),
@@ -117,7 +117,7 @@ export const orders = pgTable("orders", {
 });
 
 export const orderItems = pgTable("order_items", {
-	id: integer("id").primaryKey(),
+	id: serial("id").primaryKey(),
 	orderId: integer("order_id")
 		.notNull()
 		.references(() => orders.id, { onDelete: "cascade" }),
@@ -130,7 +130,7 @@ export const orderItems = pgTable("order_items", {
 });
 
 export const reviews = pgTable("reviews", {
-	id: integer("id").primaryKey(),
+	id: serial("id").primaryKey(),
 	productId: integer("product_id")
 		.notNull()
 		.references(() => products.id, { onDelete: "cascade" }),
@@ -143,7 +143,7 @@ export const reviews = pgTable("reviews", {
 });
 
 export const wishlists = pgTable("wishlists", {
-	id: integer("id").primaryKey(),
+	id: serial("id").primaryKey(),
 	userId: text("user_id")
 		.notNull()
 		.references(() => user.id, { onDelete: "cascade" }),
