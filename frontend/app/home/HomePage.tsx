@@ -6,7 +6,7 @@ import { ShoppingCart, Heart, Star, ChevronRight, User, Package, CreditCard, Hea
 import { Button } from "@/components/ui/Button";
 import { Card, CardContent, CardFooter } from "@/components/ui/Card";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/Carousel";
-import LoginPage from "@/app/login/Page";
+import LoginPage from "@/app/login/page";
 import Header from "@/components/layout/Header";
 import { useState, useEffect } from "react";
 import { getData } from "../ApiConfig";
@@ -80,8 +80,6 @@ const formatPrice = (price: number) => {
 export default function HomePage() {
 	const [isLogin, setIsLogin] = useState(false);
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
-	const [isLoading, setIsLoading] = useState(true);
-
 	useEffect(() => {
 		const checkAuth = async () => {
 			try {
@@ -89,8 +87,6 @@ export default function HomePage() {
 				setIsLoggedIn(!!result);
 			} catch {
 				setIsLoggedIn(false);
-			} finally {
-				setIsLoading(false);
 			}
 		};
 		checkAuth();
