@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useParams } from "next/navigation";
 import {
 	ShoppingCart,
@@ -18,17 +19,18 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Card, CardContent } from "@/components/ui/Card";
+import Header from "@/components/layout/Header";
 import { getData } from "@/app/ApiConfig";
 
 const products = [
-	{ id: 1, name: "Wireless Headphone Pro", price: 299000, originalPrice: 499000, rating: 4.5, reviews: 234, image: "🎧", category: "Elektronik", brand: "SoundMax", stock: 15 },
-	{ id: 2, name: "Smart Watch Series 5", price: 899000, originalPrice: 1299000, rating: 4.8, reviews: 567, image: "⌚", category: "Elektronik", brand: "TechGear", stock: 8 },
-	{ id: 3, name: "Kemeja Casual Premium", price: 189000, originalPrice: 289000, rating: 4.2, reviews: 123, image: "👔", category: "Fashion", brand: "StyleHouse", stock: 25 },
-	{ id: 4, name: "Lipstick Matte Collection", price: 99000, originalPrice: 149000, rating: 4.6, reviews: 456, image: "💄", category: "Kecantikan", brand: "GlowUp", stock: 50 },
-	{ id: 5, name: "Portable Blender", price: 159000, originalPrice: 249000, rating: 4.3, reviews: 89, image: "🥤", category: "Rumah Tangga", brand: "HomePro", stock: 30 },
-	{ id: 6, name: "Running Shoes Sport", price: 399000, originalPrice: 599000, rating: 4.7, reviews: 321, image: "👟", category: "Olahraga", brand: "SportMax", stock: 12 },
-	{ id: 7, name: "Novel Bestseller 2024", price: 79000, originalPrice: 120000, rating: 4.4, reviews: 678, image: "📖", category: "Buku", brand: "BookWorld", stock: 100 },
-	{ id: 8, name: "Coffee Bean Premium", price: 129000, originalPrice: 179000, rating: 4.5, reviews: 234, image: "☕", category: "Makanan", brand: "CoffeeHub", stock: 45 },
+	{ id: 1, name: "Wireless Headphone Pro", price: 299000, originalPrice: 499000, rating: 4.5, reviews: 234, image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&h=800&fit=crop", category: "Elektronik", brand: "SoundMax", stock: 15 },
+	{ id: 2, name: "Smart Watch Series 5", price: 899000, originalPrice: 1299000, rating: 4.8, reviews: 567, image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&h=800&fit=crop", category: "Elektronik", brand: "TechGear", stock: 8 },
+	{ id: 3, name: "Kemeja Casual Premium", price: 189000, originalPrice: 289000, rating: 4.2, reviews: 123, image: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=800&h=800&fit=crop", category: "Fashion", brand: "StyleHouse", stock: 25 },
+	{ id: 4, name: "Lipstick Matte Collection", price: 99000, originalPrice: 149000, rating: 4.6, reviews: 456, image: "https://images.unsplash.com/photo-1586495777744-4413f21062fa?w=800&h=800&fit=crop", category: "Kecantikan", brand: "GlowUp", stock: 50 },
+	{ id: 5, name: "Portable Blender", price: 159000, originalPrice: 249000, rating: 4.3, reviews: 89, image: "https://images.unsplash.com/photo-1570222094114-d054a817e56b?w=800&h=800&fit=crop", category: "Rumah Tangga", brand: "HomePro", stock: 30 },
+	{ id: 6, name: "Running Shoes Sport", price: 399000, originalPrice: 599000, rating: 4.7, reviews: 321, image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800&h=800&fit=crop", category: "Olahraga", brand: "SportMax", stock: 12 },
+	{ id: 7, name: "Novel Bestseller 2024", price: 79000, originalPrice: 120000, rating: 4.4, reviews: 678, image: "https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=800&h=800&fit=crop", category: "Buku", brand: "BookWorld", stock: 100 },
+	{ id: 8, name: "Coffee Bean Premium", price: 129000, originalPrice: 179000, rating: 4.5, reviews: 234, image: "https://images.unsplash.com/photo-1559056199-641a0ac8b55e?w=800&h=800&fit=crop", category: "Makanan", brand: "CoffeeHub", stock: 45 },
 ];
 
 const relatedProducts = products.slice(0, 4);
@@ -56,7 +58,6 @@ export default function ProductDetailPage() {
 	const [selectedImage, setSelectedImage] = useState(0);
 	const [activeTab, setActiveTab] = useState<"description" | "specs" | "reviews">("description");
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
-	const [isLoading, setIsLoading] = useState(true);
 
 	useEffect(() => {
 		const checkAuth = async () => {
@@ -65,8 +66,6 @@ export default function ProductDetailPage() {
 				setIsLoggedIn(!!result);
 			} catch {
 				setIsLoggedIn(false);
-			} finally {
-				setIsLoading(false);
 			}
 		};
 		checkAuth();
@@ -84,55 +83,32 @@ export default function ProductDetailPage() {
 
 	return (
 		<div className="min-h-screen bg-gray-50">
-			<header className="sticky top-0 z-50 bg-white border-b shadow-sm">
-				<div className="max-w-7xl mx-auto px-4 py-3">
-					<div className="flex items-center justify-between">
-						<Link href="/" className="flex items-center gap-2">
-							<span className="text-xl font-bold text-primary">TokoKu</span>
-						</Link>
-						<div className="flex items-center gap-3">
-							{!isLoading && isLoggedIn && (
-								<>
-									<Button variant="outline" size="icon">
-										<Heart className="h-5 w-5" />
-									</Button>
-									<Button variant="outline" size="icon" className="relative">
-										<ShoppingCart className="h-5 w-5" />
-										<span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-red-500 text-white text-xs flex items-center justify-center">
-											3
-										</span>
-									</Button>
-								</>
-							)}
-						</div>
-					</div>
-				</div>
-			</header>
+			<Header />
 
 			<main className="max-w-7xl mx-auto px-4 py-6">
 				<div className="flex items-center gap-2 text-sm text-gray-500 mb-6">
-					<Link href="/" className="hover:text-primary">Beranda</Link>
+					<Link href="/" className="hover:text-indigo-600">Beranda</Link>
 					<ChevronRight className="h-4 w-4" />
-					<Link href="/" className="hover:text-primary">{product.category}</Link>
+					<Link href="/" className="hover:text-indigo-600">{product.category}</Link>
 					<ChevronRight className="h-4 w-4" />
 					<span className="text-gray-900">{product.name}</span>
 				</div>
 
 				<div className="grid lg:grid-cols-2 gap-8 mb-12">
 					<div className="space-y-4">
-						<div className="aspect-square bg-white rounded-2xl border flex items-center justify-center text-9xl">
-							{product.image}
+						<div className="relative aspect-square bg-white rounded-2xl border overflow-hidden">
+							<Image src={product.image} alt={product.name} fill className="object-cover" sizes="(max-width: 1024px) 100vw, 50vw" />
 						</div>
 						<div className="flex gap-3">
 							{[0, 1, 2, 3].map((i) => (
 								<button
 									key={i}
 									onClick={() => setSelectedImage(i)}
-									className={`w-20 h-20 rounded-lg border-2 flex items-center justify-center text-3xl transition-colors ${
-										selectedImage === i ? "border-primary" : "border-gray-200 hover:border-gray-300"
+									className={`relative w-20 h-20 rounded-lg border-2 overflow-hidden transition-colors ${
+										selectedImage === i ? "border-indigo-600" : "border-gray-200 hover:border-gray-300"
 									}`}
 								>
-									{product.image}
+									<Image src={product.image} alt={product.name} fill className="object-cover" sizes="80px" />
 								</button>
 							))}
 						</div>
@@ -141,7 +117,7 @@ export default function ProductDetailPage() {
 					<div className="space-y-6">
 						<div>
 							<div className="flex items-center gap-2 mb-2">
-								<span className="px-2 py-1 bg-primary/10 text-primary text-xs font-medium rounded">
+								<span className="px-2 py-1 bg-indigo-100 text-indigo-600 text-xs font-medium rounded">
 									{product.brand}
 								</span>
 								<span className="px-2 py-1 bg-green-100 text-green-700 text-xs font-medium rounded">
@@ -172,7 +148,7 @@ export default function ProductDetailPage() {
 
 						<div className="bg-gray-50 rounded-xl p-4">
 							<div className="flex items-baseline gap-3">
-								<span className="text-3xl font-bold text-primary">
+								<span className="text-3xl font-bold text-indigo-600">
 									{formatPrice(product.price)}
 								</span>
 								<span className="text-lg text-gray-400 line-through">
@@ -230,19 +206,19 @@ export default function ProductDetailPage() {
 
 						<div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-4 border-t">
 							<div className="flex items-center gap-3 text-sm">
-								<Truck className="h-5 w-5 text-primary" />
+								<Truck className="h-5 w-5 text-indigo-600" />
 								<span>Gratis Ongkir</span>
 							</div>
 							<div className="flex items-center gap-3 text-sm">
-								<Shield className="h-5 w-5 text-primary" />
+								<Shield className="h-5 w-5 text-indigo-600" />
 								<span>Garansi 12 Bulan</span>
 							</div>
 							<div className="flex items-center gap-3 text-sm">
-								<RotateCcw className="h-5 w-5 text-primary" />
+								<RotateCcw className="h-5 w-5 text-indigo-600" />
 								<span>30 Hari Return</span>
 							</div>
 							<div className="flex items-center gap-3 text-sm">
-								<BadgeCheck className="h-5 w-5 text-primary" />
+								<BadgeCheck className="h-5 w-5 text-indigo-600" />
 								<span>Produk Original</span>
 							</div>
 						</div>
@@ -255,7 +231,7 @@ export default function ProductDetailPage() {
 							onClick={() => setActiveTab("description")}
 							className={`px-6 py-3 font-medium border-b-2 transition-colors ${
 								activeTab === "description"
-									? "border-primary text-primary"
+									? "border-indigo-600 text-indigo-600"
 									: "border-transparent text-gray-500 hover:text-gray-700"
 							}`}
 						>
@@ -265,7 +241,7 @@ export default function ProductDetailPage() {
 							onClick={() => setActiveTab("specs")}
 							className={`px-6 py-3 font-medium border-b-2 transition-colors ${
 								activeTab === "specs"
-									? "border-primary text-primary"
+									? "border-indigo-600 text-indigo-600"
 									: "border-transparent text-gray-500 hover:text-gray-700"
 							}`}
 						>
@@ -275,7 +251,7 @@ export default function ProductDetailPage() {
 							onClick={() => setActiveTab("reviews")}
 							className={`px-6 py-3 font-medium border-b-2 transition-colors ${
 								activeTab === "reviews"
-									? "border-primary text-primary"
+									? "border-indigo-600 text-indigo-600"
 									: "border-transparent text-gray-500 hover:text-gray-700"
 							}`}
 						>
@@ -386,7 +362,7 @@ export default function ProductDetailPage() {
 				<div className="border-t pt-8 mt-8">
 					<div className="flex items-center justify-between mb-6">
 						<h2 className="text-xl font-bold">Produk Terkait</h2>
-						<Button variant="link" className="text-primary">
+						<Button variant="link" className="text-indigo-600">
 							Lihat Semua
 						</Button>
 					</div>
@@ -397,14 +373,14 @@ export default function ProductDetailPage() {
 								className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer group"
 							>
 								<Link href={`/product/${p.id}`}>
-									<div className="aspect-square bg-gray-100 flex items-center justify-center text-5xl group-hover:scale-105 transition-transform">
-										{p.image}
+									<div className="relative aspect-square bg-gray-100 overflow-hidden">
+										<Image src={p.image} alt={p.name} fill className="object-cover group-hover:scale-105 transition-transform" sizes="(max-width: 768px) 50vw, 25vw" />
 									</div>
 									<CardContent className="p-3">
 										<h3 className="font-medium text-sm line-clamp-2 h-10">
 											{p.name}
 										</h3>
-										<p className="font-bold text-primary mt-2">
+										<p className="font-bold text-indigo-600 mt-2">
 											{formatPrice(p.price)}
 										</p>
 									</CardContent>

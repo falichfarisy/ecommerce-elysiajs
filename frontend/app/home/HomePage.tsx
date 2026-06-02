@@ -2,12 +2,12 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { ShoppingCart, Search, Menu, Heart, Star, ChevronRight, User, Package, CreditCard, Headphones, HelpCircle, MapPin, LogOut, X, PackageCheck, Tag, Percent, Shield, MessageCircle } from "lucide-react";
+import { ShoppingCart, Heart, Star, ChevronRight, User, Package, CreditCard, Headphones } from "lucide-react";
 import { Button } from "@/components/ui/Button";
-import { Input } from "@/components/ui/Input";
 import { Card, CardContent, CardFooter } from "@/components/ui/Card";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/Carousel";
 import LoginPage from "@/app/login/Page";
+import Header from "@/components/layout/Header";
 import { useState, useEffect } from "react";
 import { getData } from "../ApiConfig";
 
@@ -81,8 +81,6 @@ export default function HomePage() {
 	const [isLogin, setIsLogin] = useState(false);
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
 	const [isLoading, setIsLoading] = useState(true);
-	const [scrolled, setScrolled] = useState(false);
-	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
 	useEffect(() => {
 		const checkAuth = async () => {
@@ -98,27 +96,6 @@ export default function HomePage() {
 		checkAuth();
 	}, []);
 
-	useEffect(() => {
-		const handleScroll = () => {
-			setScrolled(window.scrollY > 20);
-		};
-		window.addEventListener("scroll", handleScroll);
-		return () => window.removeEventListener("scroll", handleScroll);
-	}, []);
-
-	useEffect(() => {
-		if (isMobileMenuOpen) {
-			document.body.style.overflow = "hidden";
-		} else {
-			document.body.style.overflow = "";
-		}
-		return () => {
-			document.body.style.overflow = "";
-		};
-	}, [isMobileMenuOpen]);
-
-	if (isLoading) return null;
-
 	return (
 		<div className="bg-[#FAFAFA] flex min-h-screen flex-col">
 			{isLogin && (
@@ -130,210 +107,8 @@ export default function HomePage() {
 				</div>
 			)}
 
-			{isMobileMenuOpen && (
-				<div className="fixed inset-0 z-200 md:hidden">
-					<div className="bg-black/50 absolute inset-0" onClick={() => setIsMobileMenuOpen(false)} />
-					<div className="animate-in slide-in-from-left bg-white shadow-2xl absolute bottom-0 left-0 top-0 w-80 max-w-[85vw] duration-300">
-						<div className="border-b flex items-center justify-between p-4">
-							<span className="text-xl font-bold">
-								<span className="text-indigo-600">Shop</span>Co
-							</span>
-							<Button variant="ghost" size="icon-sm" onClick={() => setIsMobileMenuOpen(false)}>
-								<X className="size-5" />
-							</Button>
-						</div>
-
-						{isLoggedIn ? (
-							<div className="bg-gray-50 border-b p-4">
-								<div className="flex items-center gap-3 mb-3">
-									<div className="bg-indigo-600 rounded-full size-12 flex items-center justify-center">
-										<User className="size-6 text-white" />
-									</div>
-									<div>
-										<p className="font-semibold text-gray-900">My Account</p>
-										<p className="text-sm text-gray-500">Welcome back!</p>
-									</div>
-								</div>
-								<Button variant="outline" size="sm" className="w-full">Manage Account</Button>
-							</div>
-						) : (
-							<div className="bg-indigo-50 border-b p-4">
-								<p className="text-gray-600 text-sm mb-3">Sign in to access your orders, wishlist, and exclusive deals.</p>
-								<div className="flex gap-2">
-									<Button size="sm" className="flex-1 bg-indigo-600" onClick={() => { setIsMobileMenuOpen(false); setIsLogin(true); }}>Sign In</Button>
-									<Button asChild size="sm" variant="outline" className="flex-1"><Link href="/register">Join</Link></Button>
-								</div>
-							</div>
-						)}
-
-						<nav className="max-h-[calc(100vh-200px)] overflow-y-auto p-4">
-							<p className="mb-3 text-xs font-semibold uppercase tracking-wider text-gray-400">Quick Access</p>
-							<ul className="space-y-1">
-								<li>
-									<Link href="/" className="flex items-center gap-3 rounded-lg px-3 py-3 transition-colors hover:bg-gray-100" onClick={() => setIsMobileMenuOpen(false)}>
-										<Package className="size-5 text-gray-500" />
-										<span className="font-medium text-gray-700">Home</span>
-									</Link>
-								</li>
-								<li>
-									<Link href="/" className="flex items-center gap-3 rounded-lg px-3 py-3 text-indigo-600 transition-colors hover:bg-indigo-50" onClick={() => setIsMobileMenuOpen(false)}>
-										<Percent className="size-5" />
-										<span className="font-medium">Flash Sale</span>
-										<span className="ml-auto rounded-full bg-red-500 px-2 py-0.5 text-xs text-white">Live</span>
-									</Link>
-								</li>
-								<li>
-									<Link href="/" className="flex items-center gap-3 rounded-lg px-3 py-3 transition-colors hover:bg-gray-100" onClick={() => setIsMobileMenuOpen(false)}>
-										<Heart className="size-5 text-gray-500" />
-										<span className="font-medium text-gray-700">Wishlist</span>
-									</Link>
-								</li>
-								<li>
-									<Link href="/" className="flex items-center gap-3 rounded-lg px-3 py-3 transition-colors hover:bg-gray-100" onClick={() => setIsMobileMenuOpen(false)}>
-										<ShoppingCart className="size-5 text-gray-500" />
-										<span className="font-medium text-gray-700">My Cart</span>
-									</Link>
-								</li>
-								<li>
-									<Link href="/" className="flex items-center gap-3 rounded-lg px-3 py-3 transition-colors hover:bg-gray-100" onClick={() => setIsMobileMenuOpen(false)}>
-										<PackageCheck className="size-5 text-gray-500" />
-										<span className="font-medium text-gray-700">My Orders</span>
-									</Link>
-								</li>
-							</ul>
-
-							<div className="mt-6">
-								<p className="mb-3 text-xs font-semibold uppercase tracking-wider text-gray-400">Categories</p>
-								<ul className="space-y-1">
-									{categories.slice(0, 5).map((cat) => (
-										<li key={cat.name}>
-											<Link href="/" className="flex items-center gap-3 rounded-lg px-3 py-3 transition-colors hover:bg-gray-100" onClick={() => setIsMobileMenuOpen(false)}>
-												<Tag className="size-5 text-gray-500" />
-												<span className="font-medium text-gray-700">{cat.name}</span>
-											</Link>
-										</li>
-									))}
-								</ul>
-							</div>
-
-							<div className="mt-6 border-t pt-6">
-								<p className="mb-3 text-xs font-semibold uppercase tracking-wider text-gray-400">Support</p>
-								<ul className="space-y-1">
-									<li>
-										<Link href="/" className="flex items-center gap-3 rounded-lg px-3 py-3 transition-colors hover:bg-gray-100" onClick={() => setIsMobileMenuOpen(false)}>
-											<MessageCircle className="size-5 text-gray-500" />
-											<span className="font-medium text-gray-700">Live Chat</span>
-										</Link>
-									</li>
-									<li>
-										<Link href="/" className="flex items-center gap-3 rounded-lg px-3 py-3 transition-colors hover:bg-gray-100" onClick={() => setIsMobileMenuOpen(false)}>
-											<HelpCircle className="size-5 text-gray-500" />
-											<span className="font-medium text-gray-700">Help Center</span>
-										</Link>
-									</li>
-									<li>
-										<Link href="/" className="flex items-center gap-3 rounded-lg px-3 py-3 transition-colors hover:bg-gray-100" onClick={() => setIsMobileMenuOpen(false)}>
-											<MapPin className="size-5 text-gray-500" />
-											<span className="font-medium text-gray-700">Track Order</span>
-										</Link>
-									</li>
-								</ul>
-							</div>
-
-							{isLoggedIn && (
-								<div className="mt-6 border-t pt-6">
-									<Button variant="ghost" className="w-full justify-start text-red-500 hover:bg-red-50 hover:text-red-600" onClick={() => { setIsMobileMenuOpen(false); setIsLoggedIn(false); }}>
-										<LogOut className="mr-3 size-5" />
-										<span className="font-medium">Sign Out</span>
-									</Button>
-								</div>
-							)}
-
-							<div className="mt-6 border-t pt-6">
-								<div className="flex items-center justify-center gap-4 text-gray-400">
-									<Shield className="size-4" />
-									<span className="text-xs">Secure Shopping</span>
-								</div>
-							</div>
-						</nav>
-					</div>
-				</div>
-			)}
-
-			<header className={`sticky top-0 z-50 transition-all duration-300 ${scrolled ? "bg-white/95 shadow-[0_2px_20px_rgba(0,0,0,0.08)] backdrop-blur-md" : "bg-white"}`}>
-				<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-					<div className="flex h-16 items-center justify-between gap-4 lg:h-20">
-						<div className="flex items-center gap-3">
-							<Button variant="ghost" size="icon-sm" className="md:hidden hover:bg-gray-100" onClick={() => setIsMobileMenuOpen(true)}>
-								<Menu className="size-5 text-gray-700" />
-							</Button>
-							<span className="text-2xl font-bold tracking-tight text-gray-900 lg:text-3xl">
-								<span className="text-indigo-600">Shop</span>Co
-							</span>
-						</div>
-
-						<div className="hidden lg:flex flex-1 max-w-xl mx-8">
-							<div className="flex w-full group">
-								<Input
-									type="search"
-									placeholder="Search for products, brands and more..."
-									className="rounded-r-none border-0 bg-gray-50 focus:bg-white transition-all focus:ring-0"
-								/>
-								<Button className="rounded-l-none bg-indigo-600 px-6 hover:bg-indigo-700 transition-colors" aria-label="Search">
-									<Search className="size-5" />
-								</Button>
-							</div>
-						</div>
-
-						<div className="flex items-center gap-1 sm:gap-2">
-							{isLoggedIn && (
-								<>
-									<Button variant="ghost" size="icon-sm" className="hidden md:flex text-gray-600 hover:bg-gray-100">
-										<Heart className="size-5" />
-									</Button>
-									<Button variant="outline" size="icon-sm" className="relative hover:border-indigo-300 hover:text-indigo-600 transition-colors">
-										<ShoppingCart className="size-5" />
-										<span className="absolute -top-1 -right-1 flex size-4 items-center justify-center rounded-full bg-indigo-600 text-[10px] font-semibold text-white">
-											3
-										</span>
-									</Button>
-								</>
-							)}
-							<div className="ml-1 flex items-center gap-2">
-								{isLoggedIn ? (
-									<Button variant="outline" size="sm" className="hidden sm:flex items-center gap-2 hover:border-indigo-300 hover:text-indigo-600">
-										<User className="size-4" />
-										Account
-									</Button>
-								) : (
-									<>
-										<Button onClick={() => setIsLogin(true)} variant="outline" className="hidden sm:flex hover:border-indigo-300 hover:text-indigo-600">
-											Sign In
-										</Button>
-										<Button asChild className="bg-indigo-600 shadow-lg shadow-indigo-200 hover:bg-indigo-700">
-											<Link href="/register">Join</Link>
-										</Button>
-									</>
-								)}
-							</div>
-						</div>
-					</div>
-
-					<div className="mt-2 pb-4 lg:hidden">
-						<div className="flex">
-							<Input
-								type="search"
-								placeholder="Search..."
-								className="rounded-r-none border-0 bg-gray-50"
-							/>
-							<Button className="rounded-l-none bg-indigo-600 px-4 hover:bg-indigo-700" aria-label="Search">
-								<Search className="size-5" />
-							</Button>
-						</div>
-					</div>
-				</div>
-			</header>
-
+			<Header onLoginClick={() => setIsLogin(true)} />
+			
 			<section className="relative w-full overflow-hidden bg-linear-to-br from-slate-900 via-slate-800 to-slate-900 py-12 lg:py-20">
 				<div className="absolute inset-0 opacity-30">
 					<div className="absolute -left-40 top-0 size-80 rounded-full bg-indigo-500 blur-3xl mix-blend-multiply animate-pulse" />
@@ -434,8 +209,9 @@ export default function HomePage() {
 					</div>
 					<div className="grid grid-cols-4 gap-4 md:grid-cols-6 lg:grid-cols-8">
 						{categories.map((category) => (
-							<button
+							<Link
 								key={category.name}
+								href={`/category/${category.name.toLowerCase()}`}
 								className="group flex flex-col items-center rounded-2xl p-4 transition-all duration-300 hover:bg-gray-50 hover:shadow-lg hover:shadow-indigo-100/50">
 								<div className="relative mb-3 size-16 overflow-hidden rounded-2xl shadow-md md:size-20">
 									<Image src={category.image} alt={category.name} fill sizes="(max-width: 768px) 25vw, (max-width: 1024px) 16vw, 12vw" className="object-cover transition-transform duration-500 group-hover:scale-110" />
@@ -445,7 +221,7 @@ export default function HomePage() {
 									{category.name}
 								</span>
 								<span className="mt-0.5 text-xs text-gray-400">{category.count.toLocaleString()}+ items</span>
-							</button>
+							</Link>
 						))}
 					</div>
 				</div>
