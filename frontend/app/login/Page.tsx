@@ -50,7 +50,7 @@ export default function LoginPage({ onClose }: { onClose?: () => void }) {
 	};
 
 	return (
-		<div className="w-full max-w-lg">
+		<div className="w-full max-w-xl">
 				<div className="bg-white rounded-2xl shadow-lg border p-8 md:p-12">
 					<div className="flex justify-between items-center mb-6">
 						<h2 className="text-2xl font-bold">Masuk</h2>
