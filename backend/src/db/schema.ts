@@ -1,4 +1,4 @@
-import { pgTable, text, integer, real, index, timestamp, boolean } from "drizzle-orm/pg-core";
+import { pgTable, text, integer, serial, real, index, timestamp, boolean } from "drizzle-orm/pg-core";
 import { relations, sql } from "drizzle-orm";
 
 export const user = pgTable("user", {
@@ -77,7 +77,7 @@ export const userProfile = pgTable("user_profile", {
 });
 
 export const products = pgTable("products", {
-	id: integer("id").primaryKey(),
+	id: serial("id").primaryKey(),
 	name: text("name").notNull(),
 	description: text("description"),
 	price: real("price").notNull(),
