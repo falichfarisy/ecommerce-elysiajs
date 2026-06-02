@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import {
 	ShoppingCart,
@@ -42,10 +43,18 @@ const categories = [
 ];
 
 export default function Header({ onLoginClick }: HeaderProps) {
+	const router = useRouter();
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
 	const [isLoading, setIsLoading] = useState(true);
 	const [scrolled, setScrolled] = useState(false);
 	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+	const [searchQuery, setSearchQuery] = useState("");
+
+	const handleSearch = () => {
+		const query = searchQuery.trim();
+		if (!query) return;
+		router.push(`/search?q=${encodeURIComponent(query)}`);
+	};
 
 	useEffect(() => {
 		const checkAuth = async () => {
@@ -230,8 +239,15 @@ export default function Header({ onLoginClick }: HeaderProps) {
 									type="search"
 									placeholder="Search for products, brands and more..."
 									className="flex-1 rounded-l-lg rounded-r-none border-0 bg-transparent text-black placeholder-white/70 focus:ring-0"
+									value={searchQuery}
+									onChange={(e) => setSearchQuery(e.target.value)}
+									onKeyDown={(e) => e.key === "Enter" && handleSearch()}
 								/>
-								<Button className="rounded-l-none rounded-r-lg bg-transparent px-5 hover:bg-white/20 transition-colors text-black shrink-0" aria-label="Search">
+								<Button
+									className="rounded-l-none rounded-r-lg bg-transparent px-5 hover:bg-white/20 transition-colors text-black shrink-0"
+									aria-label="Search"
+									onClick={handleSearch}
+								>
 									<Search className="size-5" />
 								</Button>
 							</div>
@@ -277,8 +293,11 @@ export default function Header({ onLoginClick }: HeaderProps) {
 								type="search"
 								placeholder="Search..."
 								className="flex-1 rounded-l-lg rounded-r-none border-0 bg-transparent text-white placeholder-white/70 focus:ring-0"
+								value={searchQuery}
+								onChange={(e) => setSearchQuery(e.target.value)}
+								onKeyDown={(e) => e.key === "Enter" && handleSearch()}
 							/>
-							<Button className="rounded-l-none rounded-r-lg bg-transparent px-4 hover:bg-white/20 text-white shrink-0" aria-label="Search">
+							<Button className="rounded-l-none rounded-r-lg bg-transparent px-4 hover:bg-white/20 text-white shrink-0" aria-label="Search" onClick={handleSearch}>
 								<Search className="size-5" />
 							</Button>
 						</div>
