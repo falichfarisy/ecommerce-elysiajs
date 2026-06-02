@@ -55,7 +55,7 @@ export const cartModule = new Elysia({ prefix: "/cart" })
 					userId: user.id,
 					productId,
 					quantity,
-				} as any);
+				} satisfies NewCart);
 			}
 
 			return { success: true, message: "Item added to cart" };
