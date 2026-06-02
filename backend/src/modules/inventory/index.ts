@@ -2,6 +2,7 @@ import { Elysia, t } from "elysia";
 import { db, products } from "../../db";
 import { eq, and, lte, gte, sql } from "drizzle-orm";
 import { authMiddleware } from "../auth";
+import { getUserRole, hasPermission } from "../rbac";
 
 const LOW_STOCK_THRESHOLD = 10;
 
@@ -62,22 +63,31 @@ export const inventoryModule = new Elysia({ prefix: "/inventory" })
 
 	.post(
 		"/adjust",
-		async ({ body, set }) => {
-			const { productId, adjustment, reason } = body as {
-				productId: number;
-				adjustment: number;
-				reason?: string;
-			};
+		async (context) => {
+			const user = (context as any).user;
+			if (!user) {
+				context.set.status = 401;
+				return { success: false, message: "Unauthorized" };
+			}
+
+			const role = await getUserRole(user.id);
+			if (!hasPermission(role, "update:products")) {
+				context.set.status = 403;
+				return { success: false, message: "Forbidden: insufficient permissions" };
+			}
+
+			const body = context.body as { productId: number; adjustment: number; reason?: string };
+			const { productId, adjustment, reason } = body;
 
 			const product = await db.select().from(products).where(eq(products.id, productId));
 			if (!product[0]) {
-				set.status = 404;
+				context.set.status = 404;
 				return { success: false, message: "Product not found" };
 			}
 
 			const newStock = product[0].stock + adjustment;
 			if (newStock < 0) {
-				set.status = 400;
+				context.set.status = 400;
 				return { success: false, message: "Insufficient stock" };
 			}
 
